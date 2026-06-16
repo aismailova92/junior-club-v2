@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Junior Club V2</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #0b4dff;
+      --blue-dark: #082b78;
+      --cyan: #25d6c8;
+      --green: #20b26b;
+      --yellow: #ffbf00;
+      --orange: #ff8a00;
+      --purple: #7c3aed;
+      --red: #ef4444;
+      --bg: #f3f6fb;
+      --text: #13254b;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .page-header {
+      background: linear-gradient(180deg, #0b2f86 0%, #0b4dff 100%);
+      color: white;
+      padding: 22px 16px 28px;
+      border-radius: 0 0 28px 28px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      opacity: 0.85;
+      margin: 6px 0 0;
+      line-height: 1.4;
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .btn {
+      border: none;
+      background: var(--blue);
+      color: white;
+      padding: 11px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn.secondary {
+      background: #edf2ff;
+      color: var(--blue);
+    }
+
+    .btn.green {
+      background: var(--green);
+    }
+
+    .btn.orange {
+      background: var(--orange);
+    }
+
+    .btn.full {
+      width: 100%;
+    }
+
+    .btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .input,
+    .textarea,
+    .select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      padding: 13px 14px;
+      font-size: 14px;
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+    }
+
+    .textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+      z-index: 9999;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .quick-card {
+      background: white;
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      min-height: 94px;
+    }
+
+    .quick-card:active {
+      transform: scale(0.98);
+    }
+
+    .quick-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .quick-title {
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .quick-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.25;
+    }
+
+    .hero {
+      background: linear-gradient(180deg, #071f62 0%, #0b3ea7 100%);
+      color: white;
+      padding: 18px 16px 26px;
+      border-radius: 0 0 30px 30px;
+    }
+
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--yellow);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(0,0,0,.18);
+    }
+
+    .hello {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .level {
+      font-size: 13px;
+      opacity: .82;
+      margin-top: 3px;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,.10));
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 16px 32px rgba(0,0,0,.18);
+    }
+
+    .balance-label {
+      font-size: 13px;
+      opacity: .82;
+    }
+
+    .points-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .points {
+      font-size: 48px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .star {
+      font-size: 28px;
+    }
+
+    .rank-line {
+      margin-top: 10px;
+      color: #fde68a;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: #dfe5ef;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0b4dff, #25d6c8);
+      transition: width .3s ease;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: #f8fbff;
+      border: 1px solid #e5eefb;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--blue);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .task-card.completed,
+    .lesson-card.completed {
+      border: 2px solid #22c55e;
+      background: #f0fdf4;
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 8px;
+      color: #16a34a;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .answer-btn {
+      width: 100%;
+      text-align: left;
+      margin-top: 10px;
+      background: #eef2ff;
+      color: #1e3a8a;
+    }
+
+    .answer-btn.correct {
+      background: #22c55e;
+      color: white;
+    }
+
+    .answer-btn.wrong {
+      background: #ef4444;
+      color: white;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .memory-card {
+      height: 70px;
+      border: none;
+      border-radius: 18px;
+      background: #e8f1ff;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .memory-card.matched {
+      background: #dcfce7;
+    }
+
+    .goal-card {
+      border-left: 5px solid var(--blue);
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .badge-card {
+      background: #f8fbff;
+      border: 1px solid #dbeafe;
+      border-radius: 18px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .badge-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .badge-name {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .badge-level {
+      margin-top: 6px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .ticket-card {
+      background: linear-gradient(135deg, #fff7d6, #ffffff);
+      border: 1px solid #fde68a;
+    }
+
+    .leader-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .leader-row:last-child {
+      border-bottom: none;
+    }
+
+    .place {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e8f1ff;
+      color: var(--blue);
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .leader-name {
+      flex: 1;
+      font-weight: 800;
+    }
+
+    .card-preview {
+      background: linear-gradient(135deg, #0b2f86, #25d6c8);
+      color: white;
+      border-radius: 26px;
+      padding: 20px;
+      min-height: 190px;
+      box-shadow: 0 16px 32px rgba(11, 77, 255, .25);
+    }
+
+    .chip {
+      width: 42px;
+      height: 30px;
+      border-radius: 7px;
+      background: #e5e7eb;
+      margin: 18px 0;
+    }
+
+    .card-number {
+      letter-spacing: 2px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 26px;
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    .settings-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .settings-item {
+      background: white;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      padding: 8px 8px 12px;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #e5e7eb;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      border: none;
+      background: transparent;
+      border-radius: 14px;
+      padding: 8px 4px;
+      font-size: 10px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      background: #e8f1ff;
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 3px;
+    }
+
+    .bottom-nav.hidden {
+      display: none;
+    }
+
+    @media (max-width: 390px) {
+      .points {
+        font-size: 42px;
+      }
+
+      .bottom-nav {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .app {
+        padding-bottom: 150px;
+      }
+
+      .screen {
+        padding-bottom: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toast" class="toast">Done</div>
+
+  <div class="app">
+
+    <!-- REGISTER -->
+    <section id="register" class="screen active">
+      <div class="page-header">
+        <h1 class="page-title">Junior Club 👋</h1>
+        <p class="page-subtitle">Create child profile to start the money adventure</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="card-title">Create profile</div>
+          <input id="regFirstName" class="input" placeholder="First name" />
+          <input id="regLastName" class="input" placeholder="Last name" />
+          <input id="regPhone" class="input" placeholder="Phone number: 994501112233" />
+          <input id="regBirthDate" class="input" type="date" />
+          <button class="btn full" onclick="registerUser()">Start Adventure</button>
+          <button class="btn secondary full" onclick="showLoginScreen()">Choose Existing Profile</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="login" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Welcome back 👋</h1>
+        <p class="page-subtitle">Choose existing profile or create a new one</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="card-title">Choose profile</div>
+          <div id="profilesList"></div>
+          <button class="btn secondary full" onclick="showRegisterScreen()">Create New Profile</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOME -->
+    <section id="home" class="screen">
+      <div class="hero">
+        <div class="profile-row">
+          <div id="homeAvatar" class="avatar">AK</div>
+          <div>
+            <div id="homeHello" class="hello">Hello, Alex! 👋</div>
+            <div id="homeLevel" class="level">Welcome back to Junior Club</div>
+          </div>
+        </div>
+
+        <div class="balance-card" onclick="goToTab('rewards')">
+          <div class="balance-label">Your Bonus Balance</div>
+          <div class="points-row">
+            <span id="heroPoints" class="points">0</span>
+            <span class="star">⭐</span>
+          </div>
+          <div class="rank-line">
+            <span id="homeRankName">Beginner Explorer</span>
+            <span> • </span>
+            <span id="homeTickets">0 tickets</span>
+          </div>
+          <div class="small" style="color: rgba(255,255,255,.8); margin-top: 8px;">
+            Earn 3000 points to unlock a free Junior Card.
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="card-title">🎯 Junior Card Goal</div>
+          <div class="muted">Collect 3000 points before getting your first Junior Card.</div>
+          <div class="progress-track">
+            <div id="cardGoalProgress" class="progress-fill"></div>
+          </div>
+          <div id="cardGoalText" class="small" style="margin-top: 8px;">0 / 3000 points</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="quick-card" onclick="goToTab('tasks')">
+            <div class="quick-icon">📋</div>
+            <div class="quick-title">Tasks</div>
+            <div id="homeTasksSummary" class="quick-subtitle">0 of 4 completed</div>
+          </div>
+
+          <div class="quick-card" onclick="goToTab('learn')">
+            <div class="quick-icon">📚</div>
+            <div class="quick-title">Learn</div>
+            <div class="quick-subtitle">Money lessons</div>
+          </div>
+
+          <div class="quick-card" onclick="goToTab('goals')">
+            <div class="quick-icon">🎯</div>
+            <div class="quick-title">Goals</div>
+            <div class="quick-subtitle">Dream board</div>
+          </div>
+
+          <div class="quick-card" onclick="goToTab('rewards')">
+            <div class="quick-icon">🏆</div>
+            <div class="quick-title">Rewards</div>
+            <div class="quick-subtitle">Badges & lottery</div>
+          </div>
+
+          <div class="quick-card" onclick="goToTab('juniorCard')">
+            <div class="quick-icon">💳</div>
+            <div class="quick-title">Junior Card</div>
+            <div class="quick-subtitle">Order & status</div>
+          </div>
+
+          <div class="quick-card" onclick="goToTab('profile')">
+            <div class="quick-icon">👤</div>
+            <div class="quick-title">Profile</div>
+            <div class="quick-subtitle">Family & settings</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🔥 Daily Bonus</div>
+          <div id="dailyLoginText" class="muted">Claim your daily bonus</div>
+          <button id="btnDailyBonus" class="btn orange" onclick="claimDailyBonus()">Claim</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasks" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Tasks 🎯</h1>
+        <p class="page-subtitle">Complete missions, earn points and upgrade your rank</p>
+      </div>
+
+      <div class="content">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div id="tasksAvailablePoints" class="stat-value">0</div>
+            <div class="stat-label">Available ⭐</div>
+          </div>
+          <div class="stat-box">
+            <div id="tasksCompletedCount" class="stat-value">0/4</div>
+            <div class="stat-label">Today</div>
+          </div>
+        </div>
+
+        <div id="taskQuiz" class="card task-card">
+          <div class="card-title">🧠 Quiz of the Day</div>
+          <div class="muted">Answer 3 questions and get up to 50 points.</div>
+          <button id="btnQuiz" class="btn" onclick="startQuiz()">Start Quiz</button>
+          <div id="statusQuiz"></div>
+        </div>
+
+        <div id="taskDaily" class="card task-card">
+          <div class="card-title">🌟 Task of the Day</div>
+          <div id="dailyTaskTitle" class="card-title"></div>
+          <div id="dailyTaskDescription" class="muted"></div>
+          <div id="dailyTaskReward" class="small" style="margin-top: 6px;"></div>
+          <button id="btnDailyTask" class="btn" onclick="openDailyTask()">Start</button>
+          <textarea id="dailyTaskAnswer" class="textarea" style="display:none;" placeholder="Write at least 10 words..."></textarea>
+          <button id="btnConfirmDaily" class="btn secondary" style="display:none;" onclick="confirmDailyTask()">Confirm Done</button>
+          <div id="statusDaily"></div>
+        </div>
+
+        <div id="taskParent" class="card task-card">
+          <div class="card-title">👨‍👩‍👧 Parent Challenge</div>
+          <div id="parentChallengeTitle" class="card-title"></div>
+          <div id="parentChallengeDescription" class="muted"></div>
+          <button id="btnParent" class="btn" onclick="openParentChallenge()">Start</button>
+          <textarea id="parentChallengeAnswer" class="textarea" style="display:none;" placeholder="Write what you did..."></textarea>
+          <select id="parentRating" class="select" style="display:none;">
+            <option value="">Parent rating</option>
+            <option value="1">⭐ 1 — Need improvement</option>
+            <option value="2">⭐⭐ 2 — Tried a little</option>
+            <option value="3">⭐⭐⭐ 3 — Good</option>
+            <option value="4">⭐⭐⭐⭐ 4 — Very good</option>
+            <option value="5">⭐⭐⭐⭐⭐ 5 — Excellent</option>
+          </select>
+          <button id="btnConfirmParent" class="btn secondary" style="display:none;" onclick="confirmParentChallenge()">Confirm</button>
+          <div id="statusParent"></div>
+        </div>
+
+        <div id="taskGame" class="card task-card">
+          <div class="card-title">🎮 Game of the Day</div>
+          <div class="muted">Match all cards and earn 20 points.</div>
+          <button id="btnGame" class="btn" onclick="openGame()">Play Game</button>
+          <div id="statusGame"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Quiz of the Day 🧠</h1>
+        <p class="page-subtitle">Answer questions about money, card safety and saving</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div id="quizCounter" class="muted">Question 1 of 3</div>
+          <div id="question" class="card-title" style="margin-top: 10px;">Loading...</div>
+          <div id="answers"></div>
+          <div id="quizResult" style="margin-top: 12px;"></div>
+          <button id="nextQuestionBtn" class="btn secondary" style="display:none;" onclick="nextQuestion()">Next Question →</button>
+          <button id="finishQuizBtn" class="btn green" style="display:none;" onclick="finishQuiz()">Finish Quiz ✅</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="game" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Game of the Day 🎮</h1>
+        <p class="page-subtitle">Match all pairs to earn points</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="card-title">Memory Game</div>
+          <div id="gameBoard" class="game-board"></div>
+          <div id="gameResult" style="margin-top:12px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARN -->
+    <section id="learn" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Learn 📚</h1>
+        <p class="page-subtitle">Financial education in short and simple lessons</p>
+      </div>
+
+      <div class="content">
+        <div id="lessonMoney" class="card lesson-card">
+          <div class="card-title">💰 Financial Basics</div>
+          <div class="muted">Learn what money is and why people save it.</div>
+          <button class="btn" onclick="completeLesson('money', 15)">Complete Lesson +15 ⭐</button>
+          <div id="statusLessonMoney"></div>
+        </div>
+
+        <div id="lessonSafety" class="card lesson-card">
+          <div class="card-title">🔐 Card Safety</div>
+          <div class="muted">PIN, OTP and card details must always stay private.</div>
+          <button class="btn" onclick="completeLesson('safety', 15)">Complete Lesson +15 ⭐</button>
+          <div id="statusLessonSafety"></div>
+        </div>
+
+        <div id="lessonSaving" class="card lesson-card">
+          <div class="card-title">🐷 Saving</div>
+          <div class="muted">Small savings every week can help you reach big goals.</div>
+          <button class="btn" onclick="completeLesson('saving', 15)">Complete Lesson +15 ⭐</button>
+          <div id="statusLessonSaving"></div>
+        </div>
+
+        <div id="lessonCashback" class="card lesson-card">
+          <div class="card-title">🎁 Cashback & Bonuses</div>
+          <div class="muted">Cashback means getting part of your spending back as money or points.</div>
+          <button class="btn" onclick="completeLesson('cashback', 15)">Complete Lesson +15 ⭐</button>
+          <div id="statusLessonCashback"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOALS -->
+    <section id="goals" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Goals 🎯</h1>
+        <p class="page-subtitle">Create savings goals and follow your dream board</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="card-title">Create New Goal</div>
+          <input id="goalName" class="input" placeholder="Goal name, e.g. PlayStation" />
+          <input id="goalAmount" class="input" type="number" placeholder="Target points, e.g. 3000" />
+          <button class="btn full" onclick="createGoal()">Create Goal</button>
+        </div>
+
+        <div id="goalsList"></div>
+      </div>
+    </section>
+
+    <!-- REWARDS -->
+    <section id="rewards" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Rewards 🏆</h1>
+        <p class="page-subtitle">Ranks, badges, lottery tickets and leaderboard</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="card-title">👑 Junior Rank</div>
+          <div id="juniorRank" style="font-size: 24px; font-weight: 900;">Beginner Explorer</div>
+          <div id="dailyBonusText" class="muted">Daily bonus: +1 ⭐</div>
+        </div>
+
+        <div class="card ticket-card">
+          <div class="card-title">🎟 Lottery / Prize Center</div>
+          <div class="muted">Every 500 points gives 1 lottery ticket.</div>
+          <div class="stat-row">
+            <div class="stat-box">
+              <div id="ticketCount" class="stat-value">0</div>
+              <div class="stat-label">Tickets</div>
+            </div>
+            <div class="stat-box">
+              <div id="monthlyEarned" class="stat-value">0</div>
+              <div class="stat-label">Earned ⭐</div>
+            </div>
+          </div>
+          <button class="btn orange full" onclick="showToast('🎁 Monthly draw will be available soon')">Monthly Draw</button>
+          <button class="btn secondary full" onclick="showToast('🏰 Grand Prize: Disneyland draw concept')">Grand Prize</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🎖 Badge Collection</div>
+          <div class="badge-grid">
+            <div class="badge-card">
+              <div class="badge-icon">🧠</div>
+              <div class="badge-name">Quiz Badge</div>
+              <div id="quizBadgeLevel" class="badge-level">Wooden</div>
+            </div>
+            <div class="badge-card">
+              <div class="badge-icon">🌟</div>
+              <div class="badge-name">Task Badge</div>
+              <div id="taskBadgeLevel" class="badge-level">Wooden</div>
+            </div>
+            <div class="badge-card">
+              <div class="badge-icon">👨‍👩‍👧</div>
+              <div class="badge-name">Parent Badge</div>
+              <div id="parentBadgeLevel" class="badge-level">Wooden</div>
+            </div>
+            <div class="badge-card">
+              <div class="badge-icon">🎮</div>
+              <div class="badge-name">Game Badge</div>
+              <div id="gameBadgeLevel" class="badge-level">Wooden</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🏅 Leaderboard</div>
+          <div class="leader-row">
+            <div class="place">1</div>
+            <div class="leader-name">Mia</div>
+            <div>5,800 ⭐</div>
+          </div>
+          <div class="leader-row">
+            <div class="place">2</div>
+            <div class="leader-name">Naya</div>
+            <div>4,200 ⭐</div>
+          </div>
+          <div class="leader-row">
+            <div class="place">3</div>
+            <div id="leaderCurrentUser" class="leader-name">Alex</div>
+            <div id="leaderCurrentPoints">0 ⭐</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JUNIOR CARD -->
+    <section id="juniorCard" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Junior Card 💳</h1>
+        <p class="page-subtitle">Order card, view status and future card benefits</p>
+      </div>
+
+      <div class="content">
+        <div class="card-preview">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:900;">Junior Club</div>
+            <div id="cardStatus">Demo Card</div>
+          </div>
+          <div class="chip"></div>
+          <div class="card-number">••••  ••••  ••••  2026</div>
+          <div class="card-bottom">
+            <div id="cardHolderName">ALEX KIDS</div>
+            <div>JUNIOR</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Card Status</div>
+          <div id="juniorCardStatusText" class="muted">Collect 3000 points to unlock free Junior Card.</div>
+          <button id="btnOrderCard" class="btn full" onclick="orderJuniorCard()">Order Junior Card</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="quick-card">
+            <div class="quick-icon">🛒</div>
+            <div class="quick-title">Transactions</div>
+            <div class="quick-subtitle">Coming soon</div>
+          </div>
+          <div class="quick-card">
+            <div class="quick-icon">🎁</div>
+            <div class="quick-title">Cashback</div>
+            <div class="quick-subtitle">Coming soon</div>
+          </div>
+          <div class="quick-card">
+            <div class="quick-icon">📱</div>
+            <div class="quick-title">Apple / Google Pay</div>
+            <div class="quick-subtitle">Future step</div>
+          </div>
+          <div class="quick-card">
+            <div class="quick-icon">📊</div>
+            <div class="quick-title">Statistics</div>
+            <div class="quick-subtitle">Spending insights</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="profile" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Profile 👤</h1>
+        <p class="page-subtitle">Progress, family, settings and parent controls</p>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <div class="profile-row">
+            <div id="profileAvatar" class="avatar">AK</div>
+            <div>
+              <div id="profileName" class="card-title">Alex Kids</div>
+              <div id="profileAge" class="muted">Junior profile</div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-box">
+              <div id="profilePoints" class="stat-value">0</div>
+              <div class="stat-label">Points</div>
+            </div>
+            <div class="stat-box">
+              <div id="profileTickets" class="stat-value">0</div>
+              <div class="stat-label">Tickets</div>
+            </div>
+            <div class="stat-box">
+              <div id="profileCompleted" class="stat-value">0</div>
+              <div class="stat-label">Missions</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">👨‍👩‍👧 Family</div>
+          <div class="muted">Parent can monitor progress, confirm challenges and support goals.</div>
+          <button class="btn secondary full" onclick="showToast('Parent dashboard will be added in next version')">Open Parent Controls</button>
+        </div>
+
+        <div class="settings-list">
+          <div class="settings-item">
+            <span>🔔 Notifications</span>
+            <span class="small">On</span>
+          </div>
+          <div class="settings-item">
+            <span>🌐 Language</span>
+            <span class="small">English</span>
+          </div>
+          <div class="settings-item">
+            <span>🔐 Privacy</span>
+            <span class="small">Protected</span>
+          </div>
+          <div class="settings-item" onclick="resetDemo()">
+            <span>🛠 Reset Demo</span>
+            <span class="small">Tap</span>
+          </div>
+          <div class="settings-item" onclick="logoutUser()">
+            <span>🚪 Log out</span>
+            <span class="small">Exit</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <nav id="bottomNav" class="bottom-nav hidden">
+    <button class="nav-btn active" onclick="showTab('home', this)">
+      <span class="nav-icon">🏠</span>Home
+    </button>
+    <button class="nav-btn" onclick="showTab('tasks', this)">
+      <span class="nav-icon">📋</span>Tasks
+    </button>
+    <button class="nav-btn" onclick="showTab('learn', this)">
+      <span class="nav-icon">📚</span>Learn
+    </button>
+    <button class="nav-btn" onclick="showTab('goals', this)">
+      <span class="nav-icon">🎯</span>Goals
+    </button>
+    <button class="nav-btn" onclick="showTab('rewards', this)">
+      <span class="nav-icon">🏆</span>Rewards
+    </button>
+    <button class="nav-btn" onclick="showTab('profile', this)">
+      <span class="nav-icon">👤</span>Profile
+    </button>
+  </nav>
+
+  <script>
+    const today = new Date().toISOString().slice(0, 10);
+
+    let state = {
+      points: Number(localStorage.getItem("v2_points") || 0),
+      quizCompleted: localStorage.getItem("v2_quizDate") === today,
+      dailyTaskCompleted: localStorage.getItem("v2_dailyTaskDate") === today,
+      parentCompleted: localStorage.getItem("v2_parentDate") === today,
+      gameCompleted: localStorage.getItem("v2_gameDate") === today,
+      dailyBonusClaimed: localStorage.getItem("v2_dailyBonusDate") === today,
+      quizDays: Number(localStorage.getItem("v2_quizDays") || 0),
+      taskDays: Number(localStorage.getItem("v2_taskDays") || 0),
+      parentDays: Number(localStorage.getItem("v2_parentDays") || 0),
+      gameDays: Number(localStorage.getItem("v2_gameDays") || 0),
+      lessons: JSON.parse(localStorage.getItem("v2_lessons") || "{}"),
+      goals: JSON.parse(localStorage.getItem("v2_goals") || "[]"),
+      cardOrdered: localStorage.getItem("v2_cardOrdered") === "true"
+    };
+
+    let users = JSON.parse(localStorage.getItem("v2_users") || "[]");
+    let activeUserId = localStorage.getItem("v2_activeUserId");
+    let activeUser = users.find(user => user.id === activeUserId);
+
+    let currentQuestionIndex = 0;
+    let quizScore = 0;
+    let firstCard = null;
+    let lockGame = false;
+    let matchedCount = 0;
+
+    const tasks = {
+      quiz: state.quizCompleted,
+      daily: state.dailyTaskCompleted,
+      parent: state.parentCompleted,
+      game: state.gameCompleted
+    };
+
+    const quizQuestions = [
+      {
+        question: "What should you NEVER share with anyone?",
+        answers: ["Your favorite color", "Your card PIN", "Your favorite cartoon", "Your school subject"],
+        correctIndex: 1,
+        explanation: "Your PIN is secret. Never share it with anyone."
+      },
+      {
+        question: "What is a good money habit?",
+        answers: ["Spend everything at once", "Save a small amount regularly", "Ignore your balance", "Buy things you do not need"],
+        correctIndex: 1,
+        explanation: "Saving regularly helps you reach your goals."
+      },
+      {
+        question: "What should you do before buying something?",
+        answers: ["Think if you really need it", "Buy it immediately", "Ask a stranger", "Share your card details"],
+        correctIndex: 0,
+        explanation: "It is smart to think before spending money."
+      },
+      {
+        question: "What should you do if you lose your card?",
+        answers: ["Ignore it", "Tell your parent or bank immediately", "Share it online", "Wait many days"],
+        correctIndex: 1,
+        explanation: "If a card is lost, an adult or the bank should be informed quickly."
+      },
+      {
+        question: "What is cashback?",
+        answers: ["Money or points returned after spending", "A secret password", "A card number", "A type of ATM"],
+        correctIndex: 0,
+        explanation: "Cashback means getting some value back after a purchase."
+      },
+      {
+        question: "What is a safe online shopping habit?",
+        answers: ["Buy from unknown links", "Share your PIN", "Ask parent before payment", "Use any website"],
+        correctIndex: 2,
+        explanation: "Children should ask a parent before online payments."
+      }
+    ];
+
+    const dailyTasksList = [
+      {
+        title: "🏦 Find nearest ATM",
+        description: "Find the nearest ATM and write where it is located.",
+        reward: 30
+      },
+      {
+        title: "💳 Learn how to check card balance",
+        description: "Write how you can check your card balance safely.",
+        reward: 25
+      },
+      {
+        title: "🔐 Learn card safety",
+        description: "Write one rule about how to keep your card safe.",
+        reward: 25
+      },
+      {
+        title: "🎁 Choose cashback category",
+        description: "Write which cashback category you would choose and why.",
+        reward: 20
+      },
+      {
+        title: "🐷 Saving goal",
+        description: "Write what you would like to save money for.",
+        reward: 20
+      }
+    ];
+
+    const parentChallenges = [
+      {
+        title: "🧹 Help with cleaning",
+        description: "Help clean one room or your study area."
+      },
+      {
+        title: "📚 Finish homework",
+        description: "Complete your homework and show it to your parent."
+      },
+      {
+        title: "👕 Organize wardrobe",
+        description: "Put your clothes in order."
+      },
+      {
+        title: "🎒 Prepare school bag",
+        description: "Pack your school bag for tomorrow."
+      },
+      {
+        title: "🍽 Help after dinner",
+        description: "Help clear the table or wash your plate."
+      }
+    ];
+
+    function getTodayIndex(list) {
+      const day = new Date().getDate();
+      return day % list.length;
+    }
+
+    function getTodayTask() {
+      return dailyTasksList[getTodayIndex(dailyTasksList)];
+    }
+
+    function getTodayParentChallenge() {
+      return parentChallenges[getTodayIndex(parentChallenges)];
+    }
+
+    function getTodayQuizQuestions() {
+      const start = getTodayIndex(quizQuestions);
+      return [0, 1, 2].map(i => quizQuestions[(start + i) % quizQuestions.length]);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function saveState() {
+      localStorage.setItem("v2_points", state.points);
+      localStorage.setItem("v2_quizDays", state.quizDays);
+      localStorage.setItem("v2_taskDays", state.taskDays);
+      localStorage.setItem("v2_parentDays", state.parentDays);
+      localStorage.setItem("v2_gameDays", state.gameDays);
+      localStorage.setItem("v2_lessons", JSON.stringify(state.lessons));
+      localStorage.setItem("v2_goals", JSON.stringify(state.goals));
+      localStorage.setItem("v2_cardOrdered", state.cardOrdered ? "true" : "false");
+    }
+
+    function registerUser() {
+      const firstName = document.getElementById("regFirstName").value.trim();
+      const lastName = document.getElementById("regLastName").value.trim();
+      const phone = document.getElementById("regPhone").value.trim();
+      const birthDate = document.getElementById("regBirthDate").value;
+
+      if (!firstName || !lastName || !phone || !birthDate) {
+        showToast("Please fill all fields");
+        return;
+      }
+
+      const user = {
+        id: Date.now().toString(),
+        firstName,
+        lastName,
+        phone,
+        birthDate
+      };
+
+      users.push(user);
+      localStorage.setItem("v2_users", JSON.stringify(users));
+      localStorage.setItem("v2_activeUserId", user.id);
+
+      activeUser = user;
+      activeUserId = user.id;
+
+      showToast("Profile created 🎉");
+      goToTab("home");
+      document.getElementById("bottomNav").classList.remove("hidden");
+      updateUI();
+    }
+
+    function showRegisterScreen() {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("register").classList.add("active");
+      document.getElementById("bottomNav").classList.add("hidden");
+    }
+
+    function showLoginScreen() {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("login").classList.add("active");
+      document.getElementById("bottomNav").classList.add("hidden");
+
+      const list = document.getElementById("profilesList");
+      list.innerHTML = "";
+
+      if (!users.length) {
+        list.innerHTML = '<div class="muted">No profiles yet.</div>';
+        return;
+      }
+
+      users.forEach(user => {
+        const btn = document.createElement("button");
+        btn.className = "btn secondary full";
+        btn.textContent = `${user.firstName} ${user.lastName}`;
+        btn.onclick = () => {
+          localStorage.setItem("v2_activeUserId", user.id);
+          activeUser = user;
+          activeUserId = user.id;
+          goToTab("home");
+          document.getElementById("bottomNav").classList.remove("hidden");
+          updateUI();
+        };
+        list.appendChild(btn);
+      });
+    }
+
+    function showTab(tabId, button) {
+      if (!activeUser) {
+        showToast("Please create or choose profile first");
+        showLoginScreen();
+        return;
+      }
+
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+
+      document.getElementById(tabId).classList.add("active");
+
+      if (button) {
+        button.classList.add("active");
+      }
+
+      updateUI();
+    }
+
+    function goToTab(tabId) {
+      if (!activeUser && tabId !== "register" && tabId !== "login") {
+        showToast("Please create or choose profile first");
+        showLoginScreen();
+        return;
+      }
+
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+
+      const tabMap = {
+        home: 0,
+        tasks: 1,
+        learn: 2,
+        goals: 3,
+        rewards: 4,
+        profile: 5
+      };
+
+      document.querySelectorAll(".nav-btn").forEach((btn, index) => {
+        btn.classList.toggle("active", index === tabMap[tabId]);
+      });
+
+      if (tabId === "quiz") loadQuestion();
+      if (tabId === "game") initGame();
+
+      updateUI();
+    }
+
+    function getInitials() {
+      if (!activeUser) return "AK";
+      return `${activeUser.firstName[0] || ""}${activeUser.lastName[0] || ""}`.toUpperCase();
+    }
+
+    function getAge() {
+      if (!activeUser || !activeUser.birthDate) return "";
+      const birth = new Date(activeUser.birthDate);
+      const now = new Date();
+      let age = now.getFullYear() - birth.getFullYear();
+      const m = now.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
+      return age;
+    }
+
+    function getRank() {
+      if (state.points >= 5000) return "Legend Junior";
+      if (state.points >= 3000) return "Smart Saver";
+      if (state.points >= 1500) return "Money Hero";
+      if (state.points >= 500) return "Rising Explorer";
+      return "Beginner Explorer";
+    }
+
+    function getBadgeLevel(count) {
+      if (count >= 20) return "Diamond";
+      if (count >= 10) return "Gold";
+      if (count >= 5) return "Silver";
+      if (count >= 2) return "Bronze";
+      return "Wooden";
+    }
+
+    function updateUI() {
+      const completedCount = Object.values(tasks).filter(Boolean).length;
+      const cardGoalPercent = Math.min(100, Math.round((state.points / 3000) * 100));
+      const tickets = Math.floor(state.points / 500);
+      const todayTask = getTodayTask();
+      const parentChallenge = getTodayParentChallenge();
+
+      document.getElementById("homeAvatar").textContent = getInitials();
+      document.getElementById("profileAvatar").textContent = getInitials();
+
+      const fullName = activeUser ? `${activeUser.firstName} ${activeUser.lastName}` : "Alex Kids";
+      document.getElementById("homeHello").textContent = `Hello, ${activeUser ? activeUser.firstName : "Alex"}! 👋`;
+      document.getElementById("profileName").textContent = fullName;
+      document.getElementById("profileAge").textContent = activeUser ? `Age: ${getAge()} • Junior profile` : "Junior profile";
+      document.getElementById("cardHolderName").textContent = fullName.toUpperCase();
+
+      document.getElementById("heroPoints").textContent = state.points.toLocaleString();
+      document.getElementById("homeRankName").textContent = getRank();
+      document.getElementById("juniorRank").textContent = getRank();
+      document.getElementById("homeTickets").textContent = `${tickets} tickets`;
+      document.getElementById("ticketCount").textContent = tickets;
+      document.getElementById("monthlyEarned").textContent = state.points;
+      document.getElementById("leaderCurrentUser").textContent = activeUser ? activeUser.firstName : "Alex";
+      document.getElementById("leaderCurrentPoints").textContent = `${state.points} ⭐`;
+
+      document.getElementById("cardGoalProgress").style.width = `${cardGoalPercent}%`;
+      document.getElementById("cardGoalText").textContent = `${state.points} / 3000 points`;
+
+      document.getElementById("homeTasksSummary").textContent = `${completedCount} of 4 completed`;
+      document.getElementById("tasksCompletedCount").textContent = `${completedCount}/4`;
+
+      const available =
+        (tasks.quiz ? 0 : 50) +
+        (tasks.daily ? 0 : todayTask.reward) +
+        (tasks.parent ? 0 : 25) +
+        (tasks.game ? 0 : 20);
+
+      document.getElementById("tasksAvailablePoints").textContent = available;
+
+      document.getElementById("dailyTaskTitle").textContent = todayTask.title;
+      document.getElementById("dailyTaskDescription").textContent = todayTask.description;
+      document.getElementById("dailyTaskReward").textContent = `Reward: +${todayTask.reward} ⭐`;
+
+      document.getElementById("parentChallengeTitle").textContent = parentChallenge.title;
+      document.getElementById("parentChallengeDescription").textContent = parentChallenge.description;
+
+      updateTaskCards();
+      updateLessons();
+      renderGoals();
+
+      document.getElementById("quizBadgeLevel").textContent = getBadgeLevel(state.quizDays);
+      document.getElementById("taskBadgeLevel").textContent = getBadgeLevel(state.taskDays);
+      document.getElementById("parentBadgeLevel").textContent = getBadgeLevel(state.parentDays);
+      document.getElementById("gameBadgeLevel").textContent = getBadgeLevel(state.gameDays);
+
+      const dailyBonusAmount = Math.max(1, Math.min(10, Math.floor(state.points / 500) + 1));
+      document.getElementById("dailyBonusText").textContent = `Daily bonus: +${dailyBonusAmount} ⭐`;
+
+      if (state.dailyBonusClaimed) {
+        document.getElementById("dailyLoginText").textContent = "Daily bonus already claimed today ✅";
+        document.getElementById("btnDailyBonus").disabled = true;
+        document.getElementById("btnDailyBonus").textContent = "Claimed";
+      } else {
+        document.getElementById("dailyLoginText").textContent = `Claim your daily bonus: +${dailyBonusAmount} ⭐`;
+        document.getElementById("btnDailyBonus").disabled = false;
+        document.getElementById("btnDailyBonus").textContent = "Claim";
+      }
+
+      document.getElementById("profilePoints").textContent = state.points;
+      document.getElementById("profileTickets").textContent = tickets;
+      document.getElementById("profileCompleted").textContent = completedCount;
+
+      updateJuniorCard();
+      saveState();
+    }
+
+    function updateTaskCards() {
+      setTaskCard("Quiz", tasks.quiz, "Quiz completed today ✅");
+      setTaskCard("Daily", tasks.daily, "Daily task completed today ✅");
+      setTaskCard("Parent", tasks.parent, "Parent challenge completed today ✅");
+      setTaskCard("Game", tasks.game, "Game completed today ✅");
+    }
+
+    function setTaskCard(name, completed, message) {
+      const card = document.getElementById(`task${name}`);
+      const status = document.getElementById(`status${name}`);
+      const button = document.getElementById(`btn${name}`);
+
+      if (!card || !status || !button) return;
+
+      if (completed) {
+        card.classList.add("completed");
+        status.innerHTML = `<span class="status">${message}</span>`;
+        button.disabled = true;
+        button.textContent = "Completed";
+      } else {
+        card.classList.remove("completed");
+        status.innerHTML = "";
+        button.disabled = false;
+
+        if (name === "Quiz") button.textContent = "Start Quiz";
+        if (name === "Daily") button.textContent = "Start";
+        if (name === "Parent") button.textContent = "Start";
+        if (name === "Game") button.textContent = "Play Game";
+      }
+    }
+
+    function claimDailyBonus() {
+      if (state.dailyBonusClaimed) return;
+      const bonus = Math.max(1, Math.min(10, Math.floor(state.points / 500) + 1));
+      state.points += bonus;
+      state.dailyBonusClaimed = true;
+      localStorage.setItem("v2_dailyBonusDate", today);
+      showToast(`🔥 Daily bonus claimed! +${bonus} ⭐`);
+      updateUI();
+    }
+
+    function startQuiz() {
+      if (tasks.quiz) {
+        showToast("Quiz already completed today");
+        return;
+      }
+      currentQuestionIndex = 0;
+      quizScore = 0;
+      goToTab("quiz");
+    }
+
+    function loadQuestion() {
+      if (tasks.quiz) {
+        document.getElementById("quizCounter").textContent = "Completed";
+        document.getElementById("question").textContent = "You already completed today's quiz 🎉";
+        document.getElementById("answers").innerHTML = "";
+        document.getElementById("quizResult").innerHTML = "Come back tomorrow for new questions.";
+        document.getElementById("nextQuestionBtn").style.display = "none";
+        document.getElementById("finishQuizBtn").style.display = "none";
+        return;
+      }
+
+      const todayQuiz = getTodayQuizQuestions();
+      const q = todayQuiz[currentQuestionIndex];
+
+      document.getElementById("quizCounter").textContent = `Question ${currentQuestionIndex + 1} of ${todayQuiz.length}`;
+      document.getElementById("question").textContent = q.question;
+      document.getElementById("quizResult").innerHTML = "";
+      document.getElementById("nextQuestionBtn").style.display = "none";
+      document.getElementById("finishQuizBtn").style.display = "none";
+
+      const answers = document.getElementById("answers");
+      answers.innerHTML = "";
+
+      q.answers.forEach((answer, index) => {
+        const btn = document.createElement("button");
+        btn.className = "btn answer-btn";
+        btn.textContent = answer;
+        btn.onclick = () => checkAnswer(index);
+        answers.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedIndex) {
+      const todayQuiz = getTodayQuizQuestions();
+      const q = todayQuiz[currentQuestionIndex];
+      const buttons = document.querySelectorAll("#answers .answer-btn");
+
+      buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        if (index === q.correctIndex) btn.classList.add("correct");
+        if (index === selectedIndex && selectedIndex !== q.correctIndex) btn.classList.add("wrong");
+      });
+
+      if (selectedIndex === q.correctIndex) {
+        quizScore++;
+        state.points += 10;
+        document.getElementById("quizResult").innerHTML = `✅ Correct! +10 ⭐<br><span class="muted">${q.explanation}</span>`;
+      } else {
+        document.getElementById("quizResult").innerHTML = `❌ Not quite.<br><span class="muted">${q.explanation}</span>`;
+      }
+
+      if (currentQuestionIndex < todayQuiz.length - 1) {
+        document.getElementById("nextQuestionBtn").style.display = "inline-block";
+      } else {
+        document.getElementById("finishQuizBtn").style.display = "inline-block";
+      }
+
+      updateUI();
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      loadQuestion();
+    }
+
+    function finishQuiz() {
+      if (tasks.quiz) return;
+
+      const bonus = quizScore === 3 ? 20 : 0;
+      if (bonus) state.points += bonus;
+
+      tasks.quiz = true;
+      state.quizCompleted = true;
+      state.quizDays++;
+      localStorage.setItem("v2_quizDate", today);
+
+      showToast(bonus ? "🏆 Perfect quiz! +20 bonus" : "Quiz completed 🎉");
+      updateUI();
+
+      setTimeout(() => goToTab("home"), 800);
+    }
+
+    function openDailyTask() {
+      if (tasks.daily) return;
+      document.getElementById("dailyTaskAnswer").style.display = "block";
+      document.getElementById("btnConfirmDaily").style.display = "inline-block";
+      showToast("Write at least 10 words");
+    }
+
+    function confirmDailyTask() {
+      const answer = document.getElementById("dailyTaskAnswer").value.trim();
+      const wordCount = answer.split(/\s+/).filter(Boolean).length;
+
+      if (wordCount < 10) {
+        showToast("Please write at least 10 words");
+        return;
+      }
+
+      const todayTask = getTodayTask();
+      state.points += todayTask.reward;
+      tasks.daily = true;
+      state.dailyTaskCompleted = true;
+      state.taskDays++;
+      localStorage.setItem("v2_dailyTaskDate", today);
+
+      document.getElementById("dailyTaskAnswer").style.display = "none";
+      document.getElementById("btnConfirmDaily").style.display = "none";
+
+      showToast(`Task completed! +${todayTask.reward} ⭐`);
+      updateUI();
+    }
+
+    function openParentChallenge() {
+      if (tasks.parent) return;
+      document.getElementById("parentChallengeAnswer").style.display = "block";
+      document.getElementById("parentRating").style.display = "block";
+      document.getElementById("btnConfirmParent").style.display = "inline-block";
+      showToast("Complete challenge and ask parent to rate");
+    }
+
+    function confirmParentChallenge() {
+      const answer = document.getElementById("parentChallengeAnswer").value.trim();
+      const rating = Number(document.getElementById("parentRating").value);
+
+      if (answer.split(/\s+/).filter(Boolean).length < 5) {
+        showToast("Please write a short answer");
+        return;
+      }
+
+      if (!rating) {
+        showToast("Please choose parent rating");
+        return;
+      }
+
+      const reward = rating * 5;
+      state.points += reward;
+      tasks.parent = true;
+      state.parentCompleted = true;
+      state.parentDays++;
+      localStorage.setItem("v2_parentDate", today);
+
+      document.getElementById("parentChallengeAnswer").style.display = "none";
+      document.getElementById("parentRating").style.display = "none";
+      document.getElementById("btnConfirmParent").style.display = "none";
+
+      showToast(`Parent challenge approved! +${reward} ⭐`);
+      updateUI();
+    }
+
+    function openGame() {
+      if (tasks.game) {
+        showToast("Game already completed today");
+        return;
+      }
+      goToTab("game");
+    }
+
+    function initGame() {
+      const board = document.getElementById("gameBoard");
+      board.innerHTML = "";
+      firstCard = null;
+      lockGame = false;
+      matchedCount = 0;
+
+      const icons = ["💳", "⭐", "🐷", "🎁"];
+      const cards = [...icons, ...icons].sort(() => Math.random() - 0.5);
+
+      cards.forEach(icon => {
+        const btn = document.createElement("button");
+        btn.className = "memory-card";
+        btn.dataset.icon = icon;
+        btn.textContent = "❔";
+        btn.onclick = () => flipCard(btn);
+        board.appendChild(btn);
+      });
+
+      document.getElementById("gameResult").innerHTML = "";
+    }
+
+    function flipCard(card) {
+      if (lockGame || card.classList.contains("matched") || card === firstCard) return;
+
+      card.textContent = card.dataset.icon;
+
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      if (firstCard.dataset.icon === card.dataset.icon) {
+        firstCard.classList.add("matched");
+        card.classList.add("matched");
+        matchedCount += 2;
+        firstCard = null;
+
+        if (matchedCount === 8) {
+          tasks.game = true;
+          state.gameCompleted = true;
+          state.gameDays++;
+          state.points += 20;
+          localStorage.setItem("v2_gameDate", today);
+          document.getElementById("gameResult").innerHTML = '<span class="status">🎉 Game completed! +20 ⭐</span>';
+          showToast("Game completed! +20 ⭐");
+          updateUI();
+        }
+      } else {
+        lockGame = true;
+        setTimeout(() => {
+          firstCard.textContent = "❔";
+          card.textContent = "❔";
+          firstCard = null;
+          lockGame = false;
+        }, 650);
+      }
+    }
+
+    function completeLesson(id, reward) {
+      if (state.lessons[id]) {
+        showToast("Lesson already completed");
+        return;
+      }
+
+      state.lessons[id] = true;
+      state.points += reward;
+      showToast(`Lesson completed! +${reward} ⭐`);
+      updateUI();
+    }
+
+    function updateLessons() {
+      const map = {
+        money: "Money",
+        safety: "Safety",
+        saving: "Saving",
+        cashback: "Cashback"
+      };
+
+      Object.keys(map).forEach(id => {
+        const card = document.getElementById(`lesson${map[id]}`);
+        const status = document.getElementById(`statusLesson${map[id]}`);
+        if (!card || !status) return;
+
+        if (state.lessons[id]) {
+          card.classList.add("completed");
+          status.innerHTML = '<span class="status">✅ Completed</span>';
+        } else {
+          card.classList.remove("completed");
+          status.innerHTML = "";
+        }
+      });
+    }
+
+    function createGoal() {
+      const name = document.getElementById("goalName").value.trim();
+      const amount = Number(document.getElementById("goalAmount").value);
+
+      if (!name || !amount || amount <= 0) {
+        showToast("Please enter goal name and target points");
+        return;
+      }
+
+      state.goals.push({
+        id: Date.now(),
+        name,
+        amount
+      });
+
+      document.getElementById("goalName").value = "";
+      document.getElementById("goalAmount").value = "";
+
+      showToast("Goal created 🎯");
+      updateUI();
+    }
+
+    function renderGoals() {
+      const list = document.getElementById("goalsList");
+      if (!list) return;
+
+      if (!state.goals.length) {
+        list.innerHTML = `
+          <div class="card">
+            <div class="card-title">Dream Board</div>
+            <div class="muted">No goals yet. Create your first savings goal.</div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = "";
+
+      state.goals.forEach(goal => {
+        const percent = Math.min(100, Math.round((state.points / goal.amount) * 100));
+        const card = document.createElement("div");
+        card.className = "card goal-card";
+        card.innerHTML = `
+          <div class="card-title">🎯 ${goal.name}</div>
+          <div class="muted">${state.points} / ${goal.amount} points</div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${percent}%"></div>
+          </div>
+          <div class="small" style="margin-top:8px;">${percent}% completed</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function updateJuniorCard() {
+      const unlocked = state.points >= 3000;
+
+      if (state.cardOrdered) {
+        document.getElementById("juniorCardStatusText").textContent = "Junior Card request submitted ✅";
+        document.getElementById("btnOrderCard").disabled = true;
+        document.getElementById("btnOrderCard").textContent = "Card Ordered";
+        document.getElementById("cardStatus").textContent = "Ordered";
+        return;
+      }
+
+      if (unlocked) {
+        document.getElementById("juniorCardStatusText").textContent = "Congratulations! Junior Card is unlocked.";
+        document.getElementById("btnOrderCard").disabled = false;
+        document.getElementById("btnOrderCard").textContent = "Order Junior Card";
+        document.getElementById("cardStatus").textContent = "Unlocked";
+      } else {
+        document.getElementById("juniorCardStatusText").textContent = "Collect 3000 points to unlock free Junior Card.";
+        document.getElementById("btnOrderCard").disabled = true;
+        document.getElementById("btnOrderCard").textContent = "Locked";
+        document.getElementById("cardStatus").textContent = "Locked";
+      }
+    }
+
+    function orderJuniorCard() {
+      if (state.points < 3000) {
+        showToast("Collect 3000 points first");
+        return;
+      }
+
+      state.cardOrdered = true;
+      showToast("Junior Card request submitted 💳");
+      updateUI();
+    }
+
+    function resetDemo() {
+      localStorage.removeItem("v2_points");
+      localStorage.removeItem("v2_quizDate");
+      localStorage.removeItem("v2_dailyTaskDate");
+      localStorage.removeItem("v2_parentDate");
+      localStorage.removeItem("v2_gameDate");
+      localStorage.removeItem("v2_dailyBonusDate");
+      localStorage.removeItem("v2_quizDays");
+      localStorage.removeItem("v2_taskDays");
+      localStorage.removeItem("v2_parentDays");
+      localStorage.removeItem("v2_gameDays");
+      localStorage.removeItem("v2_lessons");
+      localStorage.removeItem("v2_goals");
+      localStorage.removeItem("v2_cardOrdered");
+
+      state.points = 0;
+      state.quizCompleted = false;
+      state.dailyTaskCompleted = false;
+      state.parentCompleted = false;
+      state.gameCompleted = false;
+      state.dailyBonusClaimed = false;
+      state.quizDays = 0;
+      state.taskDays = 0;
+      state.parentDays = 0;
+      state.gameDays = 0;
+      state.lessons = {};
+      state.goals = [];
+      state.cardOrdered = false;
+
+      tasks.quiz = false;
+      tasks.daily = false;
+      tasks.parent = false;
+      tasks.game = false;
+
+      showToast("Demo reset completed");
+      updateUI();
+      goToTab("home");
+    }
+
+    function logoutUser() {
+      localStorage.removeItem("v2_activeUserId");
+      activeUser = null;
+      activeUserId = null;
+      showToast("Logged out");
+      showLoginScreen();
+    }
+
+    function initApp() {
+      if (activeUser) {
+        document.getElementById("bottomNav").classList.remove("hidden");
+        goToTab("home");
+      } else if (users.length) {
+        showLoginScreen();
+      } else {
+        showRegisterScreen();
+      }
+
+      updateUI();
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
