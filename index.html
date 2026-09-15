@@ -1429,7 +1429,7 @@ async function saveState() {
 
     if (data) {
       state.points = data.points || 0;
-      state.streakDays = data.streak_days || 0;
+      state.streakDays = Math.max(1, data.streak_days || 0);
 
 const lastLoginDate = data.last_login_date;
 
