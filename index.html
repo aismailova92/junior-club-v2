@@ -1510,8 +1510,10 @@ btn.onclick = async () => {
   activeUser = user;
   activeUserId = user.id;
 
+  // Сначала загружаем прогресс этого ребёнка из Supabase
   await loadUserProgress(user);
 
+  // И только потом открываем Home
   goToTab("home");
   document.getElementById("bottomNav").classList.remove("hidden");
   updateUI();
