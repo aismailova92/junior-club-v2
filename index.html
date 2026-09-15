@@ -1078,6 +1078,7 @@
 
     let state = {
       points: Number(localStorage.getItem("v2_points") || 0),
+      streakDays: 0,
       quizCompleted: localStorage.getItem("v2_quizDate") === today,
       dailyTaskCompleted: localStorage.getItem("v2_dailyTaskDate") === today,
       parentCompleted: localStorage.getItem("v2_parentDate") === today,
@@ -1400,6 +1401,7 @@ async function saveState() {
 
   // Сначала очищаем прогресс предыдущего профиля
   state.points = 0;
+  state.streakDays = 0;
   state.quizCompleted = false;
   state.dailyTaskCompleted = false;
   state.parentCompleted = false;
@@ -1424,7 +1426,8 @@ async function saveState() {
 
     if (data) {
       state.points = data.points || 0;
-
+      state.streakDays = data.streak_days || 0;
+      
       state.quizDays = data.quiz_days || 0;
       state.taskDays = data.task_days || 0;
       state.parentDays = data.parent_days || 0;
