@@ -1244,7 +1244,10 @@ async function saveState() {
       .from("user_progress")
       .update({
         points: state.points,
-
+        
+        streak_days: state.streakDays,
+        last_login_date: today,
+        
         quiz_days: state.quizDays,
         task_days: state.taskDays,
         parent_days: state.parentDays,
