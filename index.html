@@ -1059,7 +1059,21 @@
     </button>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script>
+    const supabaseUrl = "https://mxhfuzwhrnyygatjgmkp.supabase.co";
+    const supabaseKey = "sb_publishable_ooX-Y_JpqBFGicBhX18XCQ_Mj1u0fH7";
+
+    let supabaseClient = null;
+
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+      console.log("Supabase connected");
+    } else {
+      console.warn("Supabase library not loaded");
+    }
+    
     const today = new Date().toISOString().slice(0, 10);
 
     let state = {
