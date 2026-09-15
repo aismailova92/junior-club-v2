@@ -1360,6 +1360,62 @@
     showToast("Something went wrong");
   }
 }
+
+    async function loadUserProgress(user) {
+  if (!user || !supabaseClient) return;
+
+  // Сначала очищаем прогресс предыдущего профиля
+  state.points = 0;
+  state.quizCompleted = false;
+  state.dailyTaskCompleted = false;
+  state.parentCompleted = false;
+  state.gameCompleted = false;
+  state.quizDays = 0;
+  state.taskDays = 0;
+  state.parentDays = 0;
+  state.gameDays = 0;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("user_progress")
+      .select("*")
+      .eq("user_id", user.dbId || user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Progress load error:", error);
+      showToast("Could not load progress");
+      return;
+    }
+
+    if (data) {
+      state.points = data.points || 0;
+
+      state.quizDays = data.quiz_days || 0;
+      state.taskDays = data.task_days || 0;
+      state.parentDays = data.parent_days || 0;
+      state.gameDays = data.game_days || 0;
+
+      state.quizCompleted = data.quiz_date === today;
+      state.dailyTaskCompleted = data.task_date === today;
+      state.parentCompleted = data.parent_challenge_date === today;
+      state.gameCompleted = data.game_date === today;
+    }
+
+    tasks.quiz = state.quizCompleted;
+    tasks.daily = state.dailyTaskCompleted;
+    tasks.parent = state.parentCompleted;
+    tasks.game = state.gameCompleted;
+
+    updateUI();
+
+    console.log("User progress loaded:", data);
+
+  } catch (error) {
+    console.error("Progress load error:", error);
+  }
+}
+    
     function showRegisterScreen() {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById("register").classList.add("active");
@@ -1383,14 +1439,18 @@
         const btn = document.createElement("button");
         btn.className = "btn secondary full";
         btn.textContent = `${user.firstName} ${user.lastName}`;
-        btn.onclick = () => {
-          localStorage.setItem("v2_activeUserId", user.id);
-          activeUser = user;
-          activeUserId = user.id;
-          goToTab("home");
-          document.getElementById("bottomNav").classList.remove("hidden");
-          updateUI();
-        };
+btn.onclick = async () => {
+  localStorage.setItem("v2_activeUserId", user.id);
+
+  activeUser = user;
+  activeUserId = user.id;
+
+  await loadUserProgress(user);
+
+  goToTab("home");
+  document.getElementById("bottomNav").classList.remove("hidden");
+  updateUI();
+};
         list.appendChild(btn);
       });
     }
