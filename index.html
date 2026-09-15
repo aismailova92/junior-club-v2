@@ -1235,38 +1235,131 @@
       localStorage.setItem("v2_cardOrdered", state.cardOrdered ? "true" : "false");
     }
 
-    function registerUser() {
-      const firstName = document.getElementById("regFirstName").value.trim();
-      const lastName = document.getElementById("regLastName").value.trim();
-      const phone = document.getElementById("regPhone").value.trim();
-      const birthDate = document.getElementById("regBirthDate").value;
+   async function registerUser() {
+  const firstName = document.getElementById("regFirstName").value.trim();
+  const lastName = document.getElementById("regLastName").value.trim();
+  const phone = document.getElementById("regPhone").value.replace(/\D/g, "");
+  const birthDate = document.getElementById("regBirthDate").value;
 
-      if (!firstName || !lastName || !phone || !birthDate) {
-        showToast("Please fill all fields");
-        return;
-      }
+  if (!firstName || !lastName || !phone || !birthDate) {
+    showToast("Please fill all fields");
+    return;
+  }
 
+  if (!/^994\d{9}$/.test(phone)) {
+    showToast("Enter phone in format: 994501112233");
+    return;
+  }
+
+  if (!supabaseClient) {
+    showToast("Database connection error");
+    return;
+  }
+
+  try {
+    // Проверяем, существует ли уже пользователь с таким номером
+    const { data: existingUser, error: searchError } = await supabaseClient
+      .from("junior_users")
+      .select("*")
+      .eq("phone", phone)
+      .maybeSingle();
+
+    if (searchError) {
+      console.error("User search error:", searchError);
+      showToast("Database error");
+      return;
+    }
+
+    // Если пользователь уже существует
+    if (existingUser) {
       const user = {
-        id: Date.now().toString(),
-        firstName,
-        lastName,
-        phone,
-        birthDate
+        id: existingUser.id,
+        dbId: existingUser.id,
+        firstName: existingUser.first_name,
+        lastName: existingUser.last_name,
+        phone: existingUser.phone,
+        birthDate: existingUser.birth_date
       };
 
-      users.push(user);
+      const existingLocalIndex = users.findIndex(u => u.id === user.id);
+
+      if (existingLocalIndex === -1) {
+        users.push(user);
+      } else {
+        users[existingLocalIndex] = user;
+      }
+
       localStorage.setItem("v2_users", JSON.stringify(users));
       localStorage.setItem("v2_activeUserId", user.id);
 
       activeUser = user;
       activeUserId = user.id;
 
-      showToast("Profile created 🎉");
+      showToast("Profile found");
       goToTab("home");
       document.getElementById("bottomNav").classList.remove("hidden");
       updateUI();
+
+      return;
     }
 
+    // Если пользователя ещё нет — создаём его в Supabase
+    const { data: newUser, error: insertError } = await supabaseClient
+      .from("junior_users")
+      .insert({
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        birth_date: birthDate
+      })
+      .select("*")
+      .single();
+
+    if (insertError) {
+      console.error("User creation error:", insertError);
+      showToast("Could not create profile");
+      return;
+    }
+
+    // Создаём строку прогресса для нового пользователя
+    const { error: progressError } = await supabaseClient
+      .from("user_progress")
+      .insert({
+        user_id: newUser.id,
+        points: 0
+      });
+
+    if (progressError) {
+      console.error("Progress creation error:", progressError);
+    }
+
+    const user = {
+      id: newUser.id,
+      dbId: newUser.id,
+      firstName: newUser.first_name,
+      lastName: newUser.last_name,
+      phone: newUser.phone,
+      birthDate: newUser.birth_date
+    };
+
+    users.push(user);
+
+    localStorage.setItem("v2_users", JSON.stringify(users));
+    localStorage.setItem("v2_activeUserId", user.id);
+
+    activeUser = user;
+    activeUserId = user.id;
+
+    showToast("Profile created 🎉");
+    goToTab("home");
+    document.getElementById("bottomNav").classList.remove("hidden");
+    updateUI();
+
+  } catch (error) {
+    console.error("Registration error:", error);
+    showToast("Something went wrong");
+  }
+}
     function showRegisterScreen() {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById("register").classList.add("active");
