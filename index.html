@@ -1224,16 +1224,50 @@
       setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
-    function saveState() {
-      localStorage.setItem("v2_points", state.points);
-      localStorage.setItem("v2_quizDays", state.quizDays);
-      localStorage.setItem("v2_taskDays", state.taskDays);
-      localStorage.setItem("v2_parentDays", state.parentDays);
-      localStorage.setItem("v2_gameDays", state.gameDays);
-      localStorage.setItem("v2_lessons", JSON.stringify(state.lessons));
-      localStorage.setItem("v2_goals", JSON.stringify(state.goals));
-      localStorage.setItem("v2_cardOrdered", state.cardOrdered ? "true" : "false");
+async function saveState() {
+  // Оставляем локальное сохранение V2
+  localStorage.setItem("v2_points", state.points);
+  localStorage.setItem("v2_quizDays", state.quizDays);
+  localStorage.setItem("v2_taskDays", state.taskDays);
+  localStorage.setItem("v2_parentDays", state.parentDays);
+  localStorage.setItem("v2_gameDays", state.gameDays);
+  localStorage.setItem("v2_lessons", JSON.stringify(state.lessons));
+  localStorage.setItem("v2_goals", JSON.stringify(state.goals));
+  localStorage.setItem("v2_cardOrdered", state.cardOrdered ? "true" : "false");
+
+  // Сохраняем прогресс активного ребёнка в Supabase
+  if (!supabaseClient || !activeUser) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from("user_progress")
+      .update({
+        points: state.points,
+
+        quiz_days: state.quizDays,
+        task_days: state.taskDays,
+        parent_days: state.parentDays,
+        game_days: state.gameDays,
+
+        quiz_date: state.quizCompleted ? today : null,
+        task_date: state.dailyTaskCompleted ? today : null,
+        parent_challenge_date: state.parentCompleted ? today : null,
+        game_date: state.gameCompleted ? today : null,
+
+        updated_at: new Date().toISOString()
+      })
+      .eq("user_id", activeUser.dbId || activeUser.id);
+
+    if (error) {
+      console.error("Progress save error:", error);
+    } else {
+      console.log("Progress saved");
     }
+
+  } catch (error) {
+    console.error("Progress save error:", error);
+  }
+}
 
    async function registerUser() {
   const firstName = document.getElementById("regFirstName").value.trim();
