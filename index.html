@@ -2115,20 +2115,26 @@ btn.onclick = async () => {
       showLoginScreen();
     }
 
-    function initApp() {
-      if (activeUser) {
-        document.getElementById("bottomNav").classList.remove("hidden");
-        goToTab("home");
-      } else if (users.length) {
-        showLoginScreen();
-      } else {
-        showRegisterScreen();
-      }
+   async function initApp() {
+  if (activeUser) {
 
-      updateUI();
-    }
+    // Сначала загружаем прогресс активного ребёнка из Supabase
+    await loadUserProgress(activeUser);
 
-    initApp();
+    // Только после загрузки открываем приложение
+    document.getElementById("bottomNav").classList.remove("hidden");
+    goToTab("home");
+
+    updateUI();
+
+  } else if (users.length) {
+    showLoginScreen();
+  } else {
+    showRegisterScreen();
+  }
+}
+
+initApp();
   </script>
 </body>
 </html>
