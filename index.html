@@ -1658,7 +1658,13 @@ btn.onclick = async () => {
       document.getElementById("parentBadgeLevel").textContent = getBadgeLevel(state.parentDays);
       document.getElementById("gameBadgeLevel").textContent = getBadgeLevel(state.gameDays);
 
-      const dailyBonusAmount = Math.max(1, Math.min(10, Math.floor(state.points / 500) + 1));
+      let dailyBonusAmount = 1;
+
+if (state.streakDays >= 7) {
+  dailyBonusAmount = 5;
+} else if (state.streakDays >= 3) {
+  dailyBonusAmount = 3;
+}
       document.getElementById("dailyBonusText").textContent = `Daily bonus: +${dailyBonusAmount} ⭐`;
 
       if (state.dailyBonusClaimed) {
@@ -1710,16 +1716,40 @@ btn.onclick = async () => {
       }
     }
 
-    function claimDailyBonus() {
-      if (state.dailyBonusClaimed) return;
-      const bonus = Math.max(1, Math.min(10, Math.floor(state.points / 500) + 1));
-      state.points += bonus;
-      state.dailyBonusClaimed = true;
-      localStorage.setItem("v2_dailyBonusDate", today);
-      showToast(`🔥 Daily bonus claimed! +${bonus} ⭐`);
-      updateUI();
-    }
+   async function claimDailyBonus() {
+  if (state.dailyBonusClaimed) return;
 
+  let bonus = 1;
+
+  if (state.streakDays >= 7) {
+    bonus = 5;
+  } else if (state.streakDays >= 3) {
+    bonus = 3;
+  }
+
+  state.points += bonus;
+  state.dailyBonusClaimed = true;
+
+  if (supabaseClient && activeUser) {
+    const { error } = await supabaseClient
+      .from("user_progress")
+      .update({
+        points: state.points,
+        daily_bonus_date: today,
+        updated_at: new Date().toISOString()
+      })
+      .eq("user_id", activeUser.dbId || activeUser.id);
+
+    if (error) {
+      console.error("Daily bonus save error:", error);
+      showToast("Could not save daily bonus");
+      return;
+    }
+  }
+
+  showToast(`🔥 Daily bonus claimed! +${bonus} ⭐`);
+  updateUI();
+}
     function startQuiz() {
       if (tasks.quiz) {
         showToast("Quiz already completed today");
