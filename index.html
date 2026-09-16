@@ -1465,6 +1465,8 @@ if (!lastLoginDate) {
       state.dailyTaskCompleted = data.task_date === today;
       state.parentCompleted = data.parent_challenge_date === today;
       state.gameCompleted = data.game_date === today;
+      
+      state.dailyBonusClaimed = data.daily_bonus_date === today;
     }
 
     tasks.quiz = state.quizCompleted;
