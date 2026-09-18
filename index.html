@@ -1604,6 +1604,7 @@ if (referrerId && referrerId !== newUser.id) {
   state.taskDays = 0;
   state.parentDays = 0;
   state.gameDays = 0;
+  state.surpriseBoxOpened = false;
 
   try {
     const { data, error } = await supabaseClient
