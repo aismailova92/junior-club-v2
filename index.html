@@ -1709,10 +1709,11 @@ btn.onclick = async () => {
         btn.classList.toggle("active", index === tabMap[tabId]);
       });
 
-      if (tabId === "quiz") loadQuestion();
-      if (tabId === "game") initGame();
+   if (tabId === "quiz") loadQuestion();
+if (tabId === "game") initGame();
+if (tabId === "rewards") loadLeaderboard();
 
-      updateUI();
+updateUI();
     }
 
     function getInitials() {
@@ -1912,8 +1913,6 @@ leaderboard.forEach(user => {
     console.error("Leaderboard error:", error);
   }
 }
-
-    loadLeaderboard();
 
     function updateUI() {
       const completedCount = Object.values(tasks).filter(Boolean).length;
