@@ -1917,8 +1917,12 @@ function inviteFriend() {
     return;
   }
 
-  document.getElementById("inviteModalCount").textContent =
-    state.invitedFriends || 0;
+const friends = state.invitedFriends || 0;
+
+document.getElementById("inviteModalText").textContent =
+  friends === 1
+    ? "1 friend joined"
+    : `${friends} friends joined`;
 
   document.getElementById("inviteModal").classList.add("show");
 }
@@ -2462,10 +2466,9 @@ initApp();
   </div>
 </div>
     
-    <div class="invite-counter">
-      <strong id="inviteModalCount">0</strong>
-      <span>friends joined</span>
-    </div>
+<div class="invite-counter">
+  <span id="inviteModalText">0 friends joined</span>
+</div>
 
   </div>
 </div>
