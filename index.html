@@ -1164,6 +1164,15 @@
     
     const today = new Date().toISOString().slice(0, 10);
 
+    // Referral: read inviter ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const referralId = urlParams.get("ref");
+
+if (referralId) {
+  localStorage.setItem("junior_referrer_id", referralId);
+  console.log("Referral detected:", referralId);
+}
+
     let state = {
       points: Number(localStorage.getItem("v2_points") || 0),
       streakDays: 0,
