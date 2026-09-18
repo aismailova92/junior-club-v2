@@ -1752,6 +1752,27 @@ if (state.streakDays >= 7) {
   showToast(`🔥 Daily bonus claimed! +${bonus} ⭐`);
   updateUI();
 }
+
+function getReferralLink() {
+  if (!activeUser) return "";
+
+  const referrerId = activeUser.dbId || activeUser.id;
+
+  return `https://junior-club-v2.vercel.app/?ref=${encodeURIComponent(referrerId)}`;
+}
+
+function inviteFriend() {
+  const referralLink = getReferralLink();
+
+  if (!referralLink) {
+    showToast("Please choose a profile first");
+    return;
+  }
+
+  console.log("Referral link:", referralLink);
+  showToast("Referral link created 🔗");
+}
+    
     function startQuiz() {
       if (tasks.quiz) {
         showToast("Quiz already completed today");
