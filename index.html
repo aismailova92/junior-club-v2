@@ -1798,7 +1798,56 @@ btn.onclick = async () => {
       };
     });
 
-    console.log("🏅 Leaderboard data:", leaderboard);
+// Вес обычного Badge
+function badgeScore(days) {
+  if (days >= 20) return 5; // Diamond
+  if (days >= 10) return 4; // Gold
+  if (days >= 5) return 3;  // Silver
+  if (days >= 2) return 2;  // Bronze
+  return 1;                 // Wooden
+}
+
+// Вес Friends Badge
+function friendsBadgeScore(friends) {
+  if (friends >= 10) return 5; // Diamond
+  if (friends >= 5) return 4;  // Gold
+  if (friends >= 3) return 3;  // Silver
+  if (friends >= 1) return 2;  // Bronze
+  return 1;                    // Wooden
+}
+
+leaderboard.forEach(user => {
+  user.badgeScore =
+    badgeScore(user.quizDays) +
+    badgeScore(user.taskDays) +
+    badgeScore(user.parentDays) +
+    badgeScore(user.gameDays) +
+    friendsBadgeScore(user.invitedFriends);
+
+  // Используем только при одинаковом Badge Score
+  user.totalProgress =
+    user.quizDays +
+    user.taskDays +
+    user.parentDays +
+    user.gameDays +
+    user.invitedFriends;
+});
+
+leaderboard.sort((a, b) => {
+  // Сначала сравниваем уровни бейджей
+  if (b.badgeScore !== a.badgeScore) {
+    return b.badgeScore - a.badgeScore;
+  }
+
+  // При одинаковых уровнях — фактический прогресс
+  return b.totalProgress - a.totalProgress;
+});
+
+leaderboard.forEach((user, index) => {
+  user.position = index + 1;
+});
+
+console.table(leaderboard);
 
   } catch (error) {
     console.error("Leaderboard error:", error);
