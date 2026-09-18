@@ -2195,6 +2195,24 @@ if (state.streakDays >= 7) {
 } else if (state.streakDays >= 3) {
   dailyBonusAmount = 3;
 }
+
+      const dailyBonusIcon = document.getElementById("dailyBonusIcon");
+const dailyBonusAmountText = document.getElementById("dailyBonusAmount");
+
+if (dailyBonusIcon && dailyBonusAmountText) {
+
+  if (state.dailyBonusClaimed) {
+    dailyBonusIcon.textContent = "🌟";
+    dailyBonusAmountText.textContent =
+      `+${dailyBonusAmount} ⭐ claimed today`;
+
+  } else {
+    dailyBonusIcon.textContent = "⭐";
+    dailyBonusAmountText.textContent =
+      `Today's reward: +${dailyBonusAmount} ⭐`;
+  }
+}
+      
       document.getElementById("dailyBonusText").textContent = `Daily bonus: +${dailyBonusAmount} ⭐`;
 
       if (state.dailyBonusClaimed) {
