@@ -1880,6 +1880,35 @@ function inviteFriend() {
   }
 }
 
+   async function shareReferralLink() {
+  const referralLink = getReferralLink();
+
+  if (!referralLink) {
+    showToast("Could not create invite link");
+    return;
+  }
+
+  const shareData = {
+    title: "Junior Club",
+    text: "Join me in Junior Club! 🌟 Learn, play and earn rewards.",
+    url: referralLink
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(referralLink);
+      showToast("🔗 Invite link copied!");
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.error("Share error:", error);
+      showToast("Could not share link");
+    }
+  }
+} 
+
 function closeInviteModal() {
   document.getElementById("inviteModal").classList.remove("show");
 }
