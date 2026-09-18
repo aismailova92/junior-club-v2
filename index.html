@@ -1691,7 +1691,6 @@ if (tabId === "rewards") {
     }
 
     function goToTab(tabId) {
-      console.log("TAB OPENED:", tabId);
       
       if (!activeUser && tabId !== "register" && tabId !== "login") {
         showToast("Please create or choose profile first");
@@ -1717,11 +1716,6 @@ if (tabId === "rewards") {
 
    if (tabId === "quiz") loadQuestion();
 if (tabId === "game") initGame();
-      
-if (tabId === "rewards") {
-  console.log("🏅 Rewards opened — loading leaderboard");
-  loadLeaderboard();
-}
 
 updateUI();
     }
