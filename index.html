@@ -1679,11 +1679,15 @@ btn.onclick = async () => {
 
       document.getElementById(tabId).classList.add("active");
 
-      if (button) {
-        button.classList.add("active");
-      }
+if (button) {
+  button.classList.add("active");
+}
 
-      updateUI();
+updateUI();
+
+if (tabId === "rewards") {
+  loadLeaderboard();
+}
     }
 
     function goToTab(tabId) {
