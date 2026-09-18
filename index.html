@@ -1711,7 +1711,11 @@ btn.onclick = async () => {
 
    if (tabId === "quiz") loadQuestion();
 if (tabId === "game") initGame();
-if (tabId === "rewards") loadLeaderboard();
+      
+if (tabId === "rewards") {
+  console.log("🏅 Rewards opened — loading leaderboard");
+  loadLeaderboard();
+}
 
 updateUI();
     }
