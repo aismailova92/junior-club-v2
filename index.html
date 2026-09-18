@@ -1808,24 +1808,32 @@ btn.onclick = async () => {
       document.getElementById("parentBadgeLevel").textContent = getBadgeLevel(state.parentDays);
       document.getElementById("gameBadgeLevel").textContent = getBadgeLevel(state.gameDays);
 
+// Friends Badge
 const friendsBadgeIcon = document.getElementById("friendsBadgeIcon");
 const friendsBadgeLevel = document.getElementById("friendsBadgeLevel");
 
 if (friendsBadgeIcon && friendsBadgeLevel) {
   const friends = state.invitedFriends || 0;
 
-  if (friends >= 5) {
+  if (friends >= 10) {
+    friendsBadgeIcon.textContent = "💎";
+    friendsBadgeLevel.textContent = "Diamond · Junior Influencer";
+
+  } else if (friends >= 5) {
     friendsBadgeIcon.textContent = "🥇";
-    friendsBadgeLevel.textContent = "Club Ambassador";
+    friendsBadgeLevel.textContent = "Gold · Club Ambassador";
+
   } else if (friends >= 3) {
     friendsBadgeIcon.textContent = "🥈";
-    friendsBadgeLevel.textContent = "Social Star";
+    friendsBadgeLevel.textContent = "Silver · Social Star";
+
   } else if (friends >= 1) {
     friendsBadgeIcon.textContent = "🥉";
-    friendsBadgeLevel.textContent = "Friendly";
+    friendsBadgeLevel.textContent = "Bronze · Friendly";
+
   } else {
-    friendsBadgeIcon.textContent = "🔒";
-    friendsBadgeLevel.textContent = "Invite 1 friend";
+    friendsBadgeIcon.textContent = "🪵";
+    friendsBadgeLevel.textContent = "Wooden · Newcomer";
   }
 }
       
