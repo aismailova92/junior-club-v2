@@ -1820,6 +1820,18 @@ if (state.streakDays >= 7) {
       document.getElementById("profileCompleted").textContent = completedCount;
 
       updateJuniorCard();
+
+const inviteFriendsSummary = document.getElementById("inviteFriendsSummary");
+
+if (inviteFriendsSummary) {
+  const friends = state.invitedFriends || 0;
+
+  inviteFriendsSummary.textContent =
+    friends === 1
+      ? "1 friend joined"
+      : `${friends} friends joined`;
+}
+      
       saveState();
     }
 
