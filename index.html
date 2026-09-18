@@ -1406,6 +1406,7 @@ async function saveState() {
   // Сначала очищаем прогресс предыдущего профиля
   state.points = 0;
   state.streakDays = 0;
+  state.invitedFriends = 0;
   state.quizCompleted = false;
   state.dailyTaskCompleted = false;
   state.parentCompleted = false;
@@ -1431,6 +1432,7 @@ async function saveState() {
     if (data) {
       state.points = data.points || 0;
       state.streakDays = Math.max(1, data.streak_days || 0);
+      state.invitedFriends = data.invited_friends || 0;
 
 const lastLoginDate = data.last_login_date;
 
