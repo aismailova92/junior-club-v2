@@ -1687,6 +1687,8 @@ btn.onclick = async () => {
     }
 
     function goToTab(tabId) {
+      console.log("TAB OPENED:", tabId);
+      
       if (!activeUser && tabId !== "register" && tabId !== "login") {
         showToast("Please create or choose profile first");
         showLoginScreen();
