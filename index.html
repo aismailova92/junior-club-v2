@@ -1753,6 +1753,60 @@ btn.onclick = async () => {
       return "Wooden";
     }
 
+    async function loadLeaderboard() {
+  if (!supabaseClient) return;
+
+  try {
+    const { data: usersData, error: usersError } = await supabaseClient
+      .from("junior_users")
+      .select("id, first_name");
+
+    if (usersError) {
+      console.error("Leaderboard users error:", usersError);
+      return;
+    }
+
+    const { data: progressData, error: progressError } = await supabaseClient
+      .from("user_progress")
+      .select(`
+        user_id,
+        quiz_days,
+        task_days,
+        parent_days,
+        game_days,
+        invited_friends
+      `);
+
+    if (progressError) {
+      console.error("Leaderboard progress error:", progressError);
+      return;
+    }
+
+    const leaderboard = usersData.map(user => {
+      const progress = progressData.find(
+        item => item.user_id === user.id
+      );
+
+      return {
+        id: user.id,
+        name: user.first_name,
+        quizDays: progress?.quiz_days || 0,
+        taskDays: progress?.task_days || 0,
+        parentDays: progress?.parent_days || 0,
+        gameDays: progress?.game_days || 0,
+        invitedFriends: progress?.invited_friends || 0
+      };
+    });
+
+    console.log("🏅 Leaderboard data:", leaderboard);
+
+  } catch (error) {
+    console.error("Leaderboard error:", error);
+  }
+}
+
+    loadLeaderboard();
+
     function updateUI() {
       const completedCount = Object.values(tasks).filter(Boolean).length;
       const cardGoalPercent = Math.min(100, Math.round((state.points / 3000) * 100));
