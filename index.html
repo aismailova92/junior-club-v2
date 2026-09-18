@@ -2111,7 +2111,7 @@ if (surpriseBoxProgress && surpriseBoxIcon && surpriseBoxText && surpriseBoxBtn)
 
   surpriseBoxProgress.textContent = "4 / 4 completed";
 
-  surpriseBoxBtn.textContent = "Opened Today ✓";
+  surpriseBoxBtn.textContent = "Opened ✓";
   surpriseBoxBtn.disabled = true;
   surpriseBoxBtn.className = "btn secondary full";
 
@@ -2218,7 +2218,7 @@ if (dailyBonusIcon && dailyBonusAmountText) {
       if (state.dailyBonusClaimed) {
         document.getElementById("dailyLoginText").textContent = "Daily bonus already claimed today ✅";
         document.getElementById("btnDailyBonus").disabled = true;
-        document.getElementById("btnDailyBonus").textContent = "Claimed";
+        document.getElementById("btnDailyBonus").textContent = "Claimed ✓";
       } else {
         document.getElementById("dailyLoginText").textContent = `Claim your daily bonus: +${dailyBonusAmount} ⭐`;
         document.getElementById("btnDailyBonus").disabled = false;
