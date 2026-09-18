@@ -800,11 +800,12 @@
     0 / 4 completed
   </div>
 
-  <button
-    id="surpriseBoxBtn"
-    class="btn secondary full"
-    disabled
-  >
+<button
+  id="surpriseBoxBtn"
+  class="btn secondary full"
+  onclick="openSurpriseBox()"
+  disabled
+>
     Complete All Missions
   </button>
 
@@ -1965,6 +1966,49 @@ leaderboard.forEach(user => {
     console.error("Leaderboard error:", error);
   }
 }
+
+ function openSurpriseBox() {
+  const completedCount = Object.values(tasks).filter(Boolean).length;
+
+  if (completedCount < 4) {
+    showToast("Complete all 4 missions first 🔒");
+    return;
+  }
+
+  const rewards = [
+    { points: 5, chance: 40 },
+    { points: 10, chance: 30 },
+    { points: 20, chance: 20 },
+    { points: 50, chance: 10 }
+  ];
+
+  const random = Math.random() * 100;
+
+  let reward = 5;
+  let currentChance = 0;
+
+  for (const item of rewards) {
+    currentChance += item.chance;
+
+    if (random < currentChance) {
+      reward = item.points;
+      break;
+    }
+  }
+
+  state.points += reward;
+
+  document.getElementById("surpriseBoxIcon").textContent = "🎉";
+  document.getElementById("surpriseBoxText").textContent =
+    "Surprise! You earned a bonus!";
+
+  document.getElementById("surpriseBoxResult").textContent =
+    `+${reward} ⭐`;
+
+  showToast(`🎁 Surprise! +${reward} ⭐`);
+
+  updateUI();
+}   
 
     function updateUI() {
       const completedCount = Object.values(tasks).filter(Boolean).length;
