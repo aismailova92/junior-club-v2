@@ -1842,6 +1842,72 @@ leaderboard.forEach((user, index) => {
 
 console.table(leaderboard);
 
+  const leaderboardList = document.getElementById("leaderboardList");
+
+if (!leaderboardList) return;
+
+leaderboardList.innerHTML = "";
+
+leaderboard.forEach(user => {
+  let place = `#${user.position}`;
+
+  if (user.position === 1) place = "🥇";
+  if (user.position === 2) place = "🥈";
+  if (user.position === 3) place = "🥉";
+
+  const quizLevel = getBadgeLevel(user.quizDays);
+  const taskLevel = getBadgeLevel(user.taskDays);
+  const parentLevel = getBadgeLevel(user.parentDays);
+  const gameLevel = getBadgeLevel(user.gameDays);
+
+  let friendsLevel = "Wooden";
+
+  if (user.invitedFriends >= 10) {
+    friendsLevel = "Diamond";
+  } else if (user.invitedFriends >= 5) {
+    friendsLevel = "Gold";
+  } else if (user.invitedFriends >= 3) {
+    friendsLevel = "Silver";
+  } else if (user.invitedFriends >= 1) {
+    friendsLevel = "Bronze";
+  }
+
+  const isCurrentUser =
+    activeUser &&
+    user.id === (activeUser.dbId || activeUser.id);
+
+  const row = document.createElement("div");
+  row.className = "leader-row";
+
+  if (isCurrentUser) {
+    row.style.background = "#eef4ff";
+    row.style.borderRadius = "14px";
+  }
+
+  row.innerHTML = `
+    <div class="place">${place}</div>
+
+    <div class="leader-name">
+      ${user.name}${isCurrentUser ? " · You" : ""}
+
+      <div style="
+        font-size: 12px;
+        font-weight: 500;
+        color: #777;
+        margin-top: 4px;
+      ">
+        🧠 ${quizLevel} ·
+        🌟 ${taskLevel} ·
+        👨‍👩‍👧 ${parentLevel} ·
+        🎮 ${gameLevel} ·
+        👥 ${friendsLevel}
+      </div>
+    </div>
+  `;
+
+  leaderboardList.appendChild(row);
+});  
+
   } catch (error) {
     console.error("Leaderboard error:", error);
   }
