@@ -1940,8 +1940,6 @@ leaderboard.forEach(user => {
       document.getElementById("homeTickets").textContent = `${tickets} tickets`;
       document.getElementById("ticketCount").textContent = tickets;
       document.getElementById("monthlyEarned").textContent = state.points;
-      document.getElementById("leaderCurrentUser").textContent = activeUser ? activeUser.firstName : "Alex";
-      document.getElementById("leaderCurrentPoints").textContent = `${state.points} ⭐`;
 
       document.getElementById("cardGoalProgress").style.width = `${cardGoalPercent}%`;
       document.getElementById("cardGoalText").textContent = `${state.points} / 3000 points`;
