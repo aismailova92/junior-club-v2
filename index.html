@@ -1469,6 +1469,44 @@ async function saveState() {
       console.error("Progress creation error:", progressError);
     }
 
+  // Засчитываем приглашение, если новый пользователь пришёл по referral-ссылке
+const referrerId = localStorage.getItem("junior_referrer_id");
+
+if (referrerId && referrerId !== newUser.id) {
+  try {
+    const { data: referrerProgress, error: referrerLoadError } =
+      await supabaseClient
+        .from("user_progress")
+        .select("invited_friends")
+        .eq("user_id", referrerId)
+        .maybeSingle();
+
+    if (referrerLoadError) {
+      console.error("Referrer load error:", referrerLoadError);
+    } else if (referrerProgress) {
+      const newInvitedFriends =
+        (referrerProgress.invited_friends || 0) + 1;
+
+      const { error: referralUpdateError } = await supabaseClient
+        .from("user_progress")
+        .update({
+          invited_friends: newInvitedFriends,
+          updated_at: new Date().toISOString()
+        })
+        .eq("user_id", referrerId);
+
+      if (referralUpdateError) {
+        console.error("Referral update error:", referralUpdateError);
+      } else {
+        console.log("Referral credited to:", referrerId);
+        localStorage.removeItem("junior_referrer_id");
+      }
+    }
+  } catch (referralError) {
+    console.error("Referral error:", referralError);
+  }
+}  
+
     const user = {
       id: newUser.id,
       dbId: newUser.id,
