@@ -1863,6 +1863,23 @@ function inviteFriend() {
   document.getElementById("inviteModal").classList.add("show");
 }
 
+    async function copyReferralLink() {
+  const referralLink = getReferralLink();
+
+  if (!referralLink) {
+    showToast("Could not create invite link");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(referralLink);
+    showToast("🔗 Invite link copied!");
+  } catch (error) {
+    console.error("Copy link error:", error);
+    showToast("Could not copy link");
+  }
+}
+
 function closeInviteModal() {
   document.getElementById("inviteModal").classList.remove("show");
 }
