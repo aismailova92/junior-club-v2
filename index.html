@@ -5,6 +5,93 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Junior Club V2</title>
 
+/* Invite Friends */
+
+.invite-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.invite-modal.show {
+  display: flex;
+}
+
+.invite-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: white;
+  border-radius: 24px;
+  padding: 30px 22px 24px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.invite-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+  color: #777;
+}
+
+.invite-emoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.invite-modal-card h2 {
+  margin: 0 0 8px;
+}
+
+.invite-text {
+  color: #777;
+  margin-bottom: 22px;
+}
+
+.invite-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.invite-actions button {
+  border: none;
+  background: #f3f6ff;
+  border-radius: 16px;
+  padding: 15px 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.invite-actions button span {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.invite-counter {
+  margin-top: 22px;
+  background: #f7f8fb;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.invite-counter strong {
+  font-size: 18px;
+  margin-right: 4px;
+}
+  
   <style>
     * {
       box-sizing: border-box;
@@ -1769,8 +1856,14 @@ function inviteFriend() {
     return;
   }
 
-  console.log("Referral link:", referralLink);
-  showToast("Referral link created 🔗");
+  document.getElementById("inviteModalCount").textContent =
+    state.invitedFriends || 0;
+
+  document.getElementById("inviteModal").classList.add("show");
+}
+
+function closeInviteModal() {
+  document.getElementById("inviteModal").classList.remove("show");
 }
     
     function startQuiz() {
@@ -2190,6 +2283,46 @@ function inviteFriend() {
 }
 
 initApp();
-  </script>
+  </script>,
+  <!-- Invite Friends Modal -->
+<div id="inviteModal" class="invite-modal">
+  <div class="invite-modal-card">
+
+    <button class="invite-close" onclick="closeInviteModal()">×</button>
+
+    <div class="invite-emoji">👥</div>
+
+    <h2>Invite a Friend</h2>
+
+    <p class="invite-text">
+      Bring your friends to Junior Club!
+    </p>
+
+    <div class="invite-actions">
+
+      <button onclick="shareReferralLink()">
+        <span>📤</span>
+        Share
+      </button>
+
+      <button onclick="copyReferralLink()">
+        <span>🔗</span>
+        Copy Link
+      </button>
+
+      <button onclick="showReferralQR()">
+        <span>▦</span>
+        QR Code
+      </button>
+
+    </div>
+
+    <div class="invite-counter">
+      <strong id="inviteModalCount">0</strong>
+      <span>friends joined</span>
+    </div>
+
+  </div>
+</div>
 </body>
 </html>
