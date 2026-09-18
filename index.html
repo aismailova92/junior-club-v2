@@ -765,11 +765,43 @@
            <div id="inviteFriendsSummary" class="quick-subtitle">0 friends joined</div>
          </div>
           
-        <div class="card">
-          <div class="card-title">🔥 Daily Bonus</div>
-          <div id="dailyLoginText" class="muted">Claim your daily bonus</div>
-          <button id="btnDailyBonus" class="btn orange" onclick="claimDailyBonus()">Claim</button>
-        </div>
+       <div class="card daily-reward-card">
+  <div class="card-title">🔥 Daily Bonus</div>
+
+  <div id="dailyLoginText" class="muted">
+    Claim your daily bonus
+  </div>
+
+  <div
+    id="dailyBonusIcon"
+    style="
+      text-align: center;
+      font-size: 72px;
+      margin: 20px 0 12px;
+    "
+  >
+    ⭐
+  </div>
+
+  <div
+    id="dailyBonusAmount"
+    style="
+      text-align: center;
+      font-weight: 800;
+      margin-bottom: 14px;
+    "
+  >
+    Daily reward
+  </div>
+
+  <button
+    id="btnDailyBonus"
+    class="btn orange full"
+    onclick="claimDailyBonus()"
+  >
+    Claim Daily Bonus
+  </button>
+</div>
 
 <div class="card">
   <div class="card-title">🎁 Daily Surprise Box</div>
