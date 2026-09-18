@@ -1995,6 +1995,36 @@ leaderboard.forEach(user => {
       document.getElementById("homeTasksSummary").textContent = `${completedCount} of 4 completed`;
       document.getElementById("tasksCompletedCount").textContent = `${completedCount}/4`;
 
+      // Surprise Box progress
+const surpriseBoxProgress = document.getElementById("surpriseBoxProgress");
+const surpriseBoxIcon = document.getElementById("surpriseBoxIcon");
+const surpriseBoxText = document.getElementById("surpriseBoxText");
+const surpriseBoxBtn = document.getElementById("surpriseBoxBtn");
+
+if (surpriseBoxProgress && surpriseBoxIcon && surpriseBoxText && surpriseBoxBtn) {
+
+  surpriseBoxProgress.textContent = `${completedCount} / 4 completed`;
+
+  if (completedCount === 4) {
+    surpriseBoxIcon.textContent = "🎁";
+    surpriseBoxText.textContent =
+      "Amazing! You completed all today's missions. Your surprise is ready!";
+
+    surpriseBoxBtn.textContent = "Open Surprise Box";
+    surpriseBoxBtn.disabled = false;
+    surpriseBoxBtn.className = "btn orange full";
+
+  } else {
+    surpriseBoxIcon.textContent = "🔒";
+    surpriseBoxText.textContent =
+      "Complete all 4 daily missions to unlock your surprise!";
+
+    surpriseBoxBtn.textContent = "Complete All Missions";
+    surpriseBoxBtn.disabled = true;
+    surpriseBoxBtn.className = "btn secondary full";
+  }
+}
+
       const available =
         (tasks.quiz ? 0 : 50) +
         (tasks.daily ? 0 : todayTask.reward) +
