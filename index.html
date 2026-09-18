@@ -1910,6 +1910,37 @@ function inviteFriend() {
   }
 } 
 
+   function showReferralQR() {
+  const referralLink = getReferralLink();
+
+  if (!referralLink) {
+    showToast("Could not create invite link");
+    return;
+  }
+
+  const qrSection = document.getElementById("qrSection");
+  const qrContainer = document.getElementById("referralQRCode");
+
+  // Если QR уже открыт — скрываем его
+  if (qrSection.style.display === "block") {
+    qrSection.style.display = "none";
+    return;
+  }
+
+  // Очищаем старый QR
+  qrContainer.innerHTML = "";
+
+  // Создаём новый QR
+  new QRCode(qrContainer, {
+    text: referralLink,
+    width: 160,
+    height: 160,
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  qrSection.style.display = "block";
+} 
+
 function closeInviteModal() {
   document.getElementById("inviteModal").classList.remove("show");
 }
