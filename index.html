@@ -1969,11 +1969,16 @@ leaderboard.forEach(user => {
   }
 }
 
- function openSurpriseBox() {
+async function openSurpriseBox() {
   const completedCount = Object.values(tasks).filter(Boolean).length;
 
   if (completedCount < 4) {
     showToast("Complete all 4 missions first 🔒");
+    return;
+  }
+
+  if (state.surpriseBoxOpened) {
+    showToast("You've already opened today's Surprise Box 🎁");
     return;
   }
 
@@ -1998,19 +2003,35 @@ leaderboard.forEach(user => {
     }
   }
 
-  state.points += reward;
+  const newPoints = state.points + reward;
 
-  document.getElementById("surpriseBoxIcon").textContent = "🎉";
-  document.getElementById("surpriseBoxText").textContent =
-    "Surprise! You earned a bonus!";
+  if (supabaseClient && activeUser) {
+    const { error } = await supabaseClient
+      .from("user_progress")
+      .update({
+        points: newPoints,
+        surprise_box_date: today,
+        updated_at: new Date().toISOString()
+      })
+      .eq("user_id", activeUser.dbId || activeUser.id);
+
+    if (error) {
+      console.error("Surprise Box save error:", error);
+      showToast("Could not open Surprise Box");
+      return;
+    }
+  }
+
+  state.points = newPoints;
+  state.surpriseBoxOpened = true;
 
   document.getElementById("surpriseBoxResult").textContent =
-    `+${reward} ⭐`;
+    `🎉 +${reward} ⭐`;
 
   showToast(`🎁 Surprise! +${reward} ⭐`);
 
   updateUI();
-}   
+}
 
     function updateUI() {
       const completedCount = Object.values(tasks).filter(Boolean).length;
@@ -2051,24 +2072,35 @@ if (surpriseBoxProgress && surpriseBoxIcon && surpriseBoxText && surpriseBoxBtn)
 
   surpriseBoxProgress.textContent = `${completedCount} / 4 completed`;
 
-  if (completedCount === 4) {
-    surpriseBoxIcon.textContent = "🎁";
-    surpriseBoxText.textContent =
-      "Amazing! You completed all today's missions. Your surprise is ready!";
+ if (state.surpriseBoxOpened) {
+  surpriseBoxIcon.textContent = "🎉";
+  surpriseBoxText.textContent =
+    "You opened today's Surprise Box. Come back tomorrow!";
 
-    surpriseBoxBtn.textContent = "Open Surprise Box";
-    surpriseBoxBtn.disabled = false;
-    surpriseBoxBtn.className = "btn orange full";
+  surpriseBoxProgress.textContent = "4 / 4 completed";
 
-  } else {
-    surpriseBoxIcon.textContent = "🔒";
-    surpriseBoxText.textContent =
-      "Complete all 4 daily missions to unlock your surprise!";
+  surpriseBoxBtn.textContent = "Opened Today ✓";
+  surpriseBoxBtn.disabled = true;
+  surpriseBoxBtn.className = "btn secondary full";
 
-    surpriseBoxBtn.textContent = "Complete All Missions";
-    surpriseBoxBtn.disabled = true;
-    surpriseBoxBtn.className = "btn secondary full";
-  }
+} else if (completedCount === 4) {
+  surpriseBoxIcon.textContent = "🎁";
+  surpriseBoxText.textContent =
+    "Amazing! You completed all today's missions. Your surprise is ready!";
+
+  surpriseBoxBtn.textContent = "Open Surprise Box";
+  surpriseBoxBtn.disabled = false;
+  surpriseBoxBtn.className = "btn orange full";
+
+} else {
+  surpriseBoxIcon.textContent = "🔒";
+  surpriseBoxText.textContent =
+    "Complete all 4 daily missions to unlock your surprise!";
+
+  surpriseBoxBtn.textContent = "Complete All Missions";
+  surpriseBoxBtn.disabled = true;
+  surpriseBoxBtn.className = "btn secondary full";
+}
 }
 
       const available =
