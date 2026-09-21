@@ -2373,17 +2373,21 @@ if (inviteFriendsSummary) {
     bonus = 3;
   }
 
-  state.points += bonus;
-  state.dailyBonusClaimed = true;
+ state.points += bonus;
+state.monthlyEarned = (state.monthlyEarned || 0) + bonus;
+state.monthlyEarnedPeriod = today.slice(0, 7);
+state.dailyBonusClaimed = true;
 
   if (supabaseClient && activeUser) {
     const { error } = await supabaseClient
       .from("user_progress")
-      .update({
-        points: state.points,
-        daily_bonus_date: today,
-        updated_at: new Date().toISOString()
-      })
+    .update({
+  points: state.points,
+  monthly_earned: state.monthlyEarned,
+  monthly_earned_period: state.monthlyEarnedPeriod,
+  daily_bonus_date: today,
+  updated_at: new Date().toISOString()
+})
       .eq("user_id", activeUser.dbId || activeUser.id);
 
     if (error) {
