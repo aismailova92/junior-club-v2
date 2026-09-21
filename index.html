@@ -1519,37 +1519,11 @@ async function saveState() {
     }
 
     // Если пользователь уже существует
-    if (existingUser) {
-      const user = {
-        id: existingUser.id,
-        dbId: existingUser.id,
-        firstName: existingUser.first_name,
-        lastName: existingUser.last_name,
-        phone: existingUser.phone,
-        birthDate: existingUser.birth_date
-      };
-
-      const existingLocalIndex = users.findIndex(u => u.id === user.id);
-
-      if (existingLocalIndex === -1) {
-        users.push(user);
-      } else {
-        users[existingLocalIndex] = user;
-      }
-
-      localStorage.setItem("v2_users", JSON.stringify(users));
-      localStorage.setItem("v2_activeUserId", user.id);
-
-      activeUser = user;
-      activeUserId = user.id;
-
-      showToast("Profile found");
-      goToTab("home");
-      document.getElementById("bottomNav").classList.remove("hidden");
-      updateUI();
-
-      return;
-    }
+  if (existingUser) {
+  showToast("Profile already exists. Please log in.");
+  showLoginScreen();
+  return;
+}
 
     // Если пользователя ещё нет — создаём его в Supabase
     const { data: newUser, error: insertError } = await supabaseClient
