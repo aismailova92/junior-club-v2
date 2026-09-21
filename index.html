@@ -1628,6 +1628,8 @@ if (referrerId && referrerId !== newUser.id) {
   state.points = 0;
   state.streakDays = 0;
   state.invitedFriends = 0;
+  state.monthlyEarned = 0;
+  state.monthlyEarnedPeriod = null;
   state.quizCompleted = false;
   state.dailyTaskCompleted = false;
   state.parentCompleted = false;
@@ -1655,6 +1657,16 @@ if (referrerId && referrerId !== newUser.id) {
       state.points = data.points || 0;
       state.streakDays = Math.max(1, data.streak_days || 0);
       state.invitedFriends = data.invited_friends || 0;
+
+const currentMonth = today.slice(0, 7);
+
+if (data.monthly_earned_period === currentMonth) {
+  state.monthlyEarned = data.monthly_earned || 0;
+  state.monthlyEarnedPeriod = currentMonth;
+} else {
+  state.monthlyEarned = 0;
+  state.monthlyEarnedPeriod = currentMonth;
+}
 
 const lastLoginDate = data.last_login_date;
 
