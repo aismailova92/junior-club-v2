@@ -1741,6 +1741,79 @@ if (!lastLoginDate) {
       document.getElementById("bottomNav").classList.add("hidden");
     }
 
+async function loginByPhone() {
+  const phone = document.getElementById("loginPhone").value.replace(/\D/g, "");
+
+  if (!phone) {
+    showToast("Enter phone number");
+    return;
+  }
+
+  if (!/^994\d{9}$/.test(phone)) {
+    showToast("Enter phone in format: 994501112233");
+    return;
+  }
+
+  if (!supabaseClient) {
+    showToast("Database connection error");
+    return;
+  }
+
+  try {
+    const { data: existingUser, error } = await supabaseClient
+      .from("junior_users")
+      .select("*")
+      .eq("phone", phone)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Login error:", error);
+      showToast("Database error");
+      return;
+    }
+
+    if (!existingUser) {
+      showToast("Profile not found");
+      return;
+    }
+
+    const user = {
+      id: existingUser.id,
+      dbId: existingUser.id,
+      firstName: existingUser.first_name,
+      lastName: existingUser.last_name,
+      phone: existingUser.phone,
+      birthDate: existingUser.birth_date
+    };
+
+    const existingLocalIndex = users.findIndex(u => u.id === user.id);
+
+    if (existingLocalIndex === -1) {
+      users.push(user);
+    } else {
+      users[existingLocalIndex] = user;
+    }
+
+    localStorage.setItem("v2_users", JSON.stringify(users));
+    localStorage.setItem("v2_activeUserId", user.id);
+
+    activeUser = user;
+    activeUserId = user.id;
+
+    await loadUserProgress(user);
+
+    showToast(`Welcome back, ${user.firstName}! 👋`);
+
+    goToTab("home");
+    document.getElementById("bottomNav").classList.remove("hidden");
+    updateUI();
+
+  } catch (error) {
+    console.error("Login error:", error);
+    showToast("Something went wrong");
+  }
+}
+    
     function showLoginScreen() {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById("login").classList.add("active");
