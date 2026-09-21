@@ -674,22 +674,48 @@
       </div>
     </section>
 
-    <!-- LOGIN -->
-    <section id="login" class="screen">
-      <div class="page-header">
-        <h1 class="page-title">Welcome back 👋</h1>
-        <p class="page-subtitle">Choose existing profile or create a new one</p>
+  <!-- LOGIN -->
+<section id="login" class="screen">
+  <div class="page-header">
+    <h1 class="page-title">Welcome back 👋</h1>
+    <p class="page-subtitle">Choose a profile or log in with phone number</p>
+  </div>
+
+  <div class="content">
+    <div class="card">
+
+      <div class="card-title">Choose profile</div>
+      <div id="profilesList"></div>
+
+      <div style="text-align:center; margin:18px 0;" class="muted">
+        or
       </div>
 
-      <div class="content">
-        <div class="card">
-          <div class="card-title">Choose profile</div>
-          <div id="profilesList"></div>
-          <button class="btn secondary full" onclick="showRegisterScreen()">Create New Profile</button>
-        </div>
-      </div>
-    </section>
+      <div class="card-title">Log in with phone number</div>
 
+      <input
+        id="loginPhone"
+        class="input"
+        placeholder="Phone number: 994501112233"
+      />
+
+      <button
+        class="btn full"
+        onclick="loginByPhone()"
+      >
+        Log In
+      </button>
+
+      <button
+        class="btn secondary full"
+        onclick="showRegisterScreen()"
+      >
+        Create New Profile
+      </button>
+
+    </div>
+  </div>
+</section>
     <!-- HOME -->
     <section id="home" class="screen">
       <div class="hero">
