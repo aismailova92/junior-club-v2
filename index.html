@@ -2153,7 +2153,7 @@ async function openSurpriseBox() {
     function updateUI() {
       const completedCount = Object.values(tasks).filter(Boolean).length;
       const cardGoalPercent = Math.min(100, Math.round((state.points / 3000) * 100));
-      const tickets = Math.floor(state.points / 500);
+      const tickets = Math.floor((state.monthlyEarned || 0) / 500);
       const todayTask = getTodayTask();
       const parentChallenge = getTodayParentChallenge();
 
@@ -2170,8 +2170,9 @@ async function openSurpriseBox() {
       document.getElementById("homeRankName").textContent = getRank();
       document.getElementById("juniorRank").textContent = getRank();
       document.getElementById("homeTickets").textContent = `${tickets} tickets`;
-      document.getElementById("ticketCount").textContent = tickets;
-      document.getElementById("monthlyEarned").textContent = state.points;
+document.getElementById("ticketCount").textContent = tickets;
+document.getElementById("monthlyEarned").textContent =
+  state.monthlyEarned || 0;
 
       document.getElementById("cardGoalProgress").style.width = `${cardGoalPercent}%`;
       document.getElementById("cardGoalText").textContent = `${state.points} / 3000 points`;
