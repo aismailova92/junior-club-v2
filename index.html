@@ -650,13 +650,15 @@
 
 #monthlyDrawModal.hidden,
 #grandPrizeModal.hidden,
-#moneyLessonModal.hidden {
+#moneyLessonModal.hidden,
+#safetyLessonModal.hidden {
   display: none;
 }
 
 #monthlyDrawModal,
 #grandPrizeModal,
-#moneyLessonModal {
+#moneyLessonModal,
+#safetyLessonModal {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -668,7 +670,8 @@
 
 #monthlyDrawModal .modal-overlay,
 #grandPrizeModal .modal-overlay,
-#moneyLessonModal .modal-overlay {
+#moneyLessonModal .modal-overlay,
+#safetyLessonModal .modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -676,7 +679,8 @@
 
 #monthlyDrawModal .modal-content,
 #grandPrizeModal .modal-content,
-#moneyLessonModal .modal-content {
+#moneyLessonModal .modal-content,
+#safetyLessonModal .modal-content {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -691,7 +695,8 @@
 
 #monthlyDrawModal .modal-close,
 #grandPrizeModal .modal-close,
-#moneyLessonModal .modal-close {
+#moneyLessonModal .modal-close,
+#safetyLessonModal .modal-close {
   position: absolute;
   top: 12px;
   right: 14px;
@@ -1195,9 +1200,152 @@
 
       <div id="moneyLessonResult" style="margin-top:14px;"></div>
     </div>
+            
+  </div>
+</div>
+      
+
+<!-- CARD SAFETY LESSON MODAL -->
+<div id="safetyLessonModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeSafetyLesson()"></div>
+
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeSafetyLesson()">×</button>
+
+    <div style="text-align:center; margin-bottom:18px;">
+      <div style="font-size:52px;">🔐</div>
+      <div class="card-title">Card Safety</div>
+      <div id="safetyLessonProgress" class="muted">Step 1 of 4</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="safetyStep1" class="safety-lesson-step">
+
+      <div style="font-size:40px; text-align:center; margin:15px;">
+        💳
+      </div>
+
+      <div class="card-title">Your card has secrets</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Some card information must stay private.
+        Never share your PIN, CVV or secret banking codes with other people.
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showSafetyLessonStep(2)"
+      >
+        Next →
+      </button>
+
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="safetyStep2" class="safety-lesson-step hidden">
+
+      <div style="font-size:40px; text-align:center; margin:15px;">
+        🔢
+      </div>
+
+      <div class="card-title">Keep your PIN private</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Your PIN is the secret number used to protect your card.
+        Do not tell it to friends and do not write it on your card.
+        When entering your PIN, cover the keypad with your hand.
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showSafetyLessonStep(3)"
+      >
+        Next →
+      </button>
+
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="safetyStep3" class="safety-lesson-step hidden">
+
+      <div style="font-size:40px; text-align:center; margin:15px;">
+        📲
+      </div>
+
+      <div class="card-title">OTP is secret too</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        OTP is a one-time security code.
+        Never send your OTP to another person, even if they say
+        they are calling from the bank.
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showSafetyLessonStep(4)"
+      >
+        Safety Challenge →
+      </button>
+
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="safetyStep4" class="safety-lesson-step hidden">
+
+      <div style="font-size:40px; text-align:center; margin:15px;">
+        📱⚠️
+      </div>
+
+      <div class="card-title">Safety Challenge</div>
+
+      <div style="
+        margin-top:14px;
+        padding:16px;
+        background:#f7f8fc;
+        border-radius:16px;
+        line-height:1.5;
+      ">
+        📩 <b>Message:</b><br><br>
+        “Hello! I'm calling from your bank.
+        Please tell me the OTP code from your SMS
+        to confirm your card.”
+      </div>
+
+      <div style="font-weight:700; margin:18px 0 14px;">
+        What should you do?
+      </div>
+
+      <button
+        class="btn secondary full"
+        onclick="answerSafetyLesson(false)"
+      >
+        Send the OTP code
+      </button>
+
+      <button
+        class="btn secondary full"
+        onclick="answerSafetyLesson(false)"
+      >
+        Send the code only if they know my name
+      </button>
+
+      <button
+        class="btn secondary full"
+        onclick="answerSafetyLesson(true)"
+      >
+        Do not share it and tell a parent
+      </button>
+
+      <div id="safetyLessonResult" style="margin-top:14px;"></div>
+
+    </div>
 
   </div>
 </div>
+
       
     <!-- GOALS -->
     <section id="goals" class="screen">
@@ -3210,6 +3358,57 @@ function answerMoneyLesson(correct) {
   }, 1200);
 }
 
+function openSafetyLesson() {
+  if (state.lessons.safety) {
+    showToast("Lesson already completed ✅");
+    return;
+  }
+
+  document.getElementById("safetyLessonResult").innerHTML = "";
+  showSafetyLessonStep(1);
+  document.getElementById("safetyLessonModal").classList.remove("hidden");
+}
+
+function closeSafetyLesson() {
+  document.getElementById("safetyLessonModal").classList.add("hidden");
+}
+
+function showSafetyLessonStep(step) {
+  document.querySelectorAll(".safety-lesson-step").forEach(item => {
+    item.classList.add("hidden");
+  });
+
+  document.getElementById(`safetyStep${step}`).classList.remove("hidden");
+
+  document.getElementById("safetyLessonProgress").textContent =
+    `Step ${step} of 4`;
+}
+
+function answerSafetyLesson(correct) {
+  const result = document.getElementById("safetyLessonResult");
+
+  if (!correct) {
+    result.innerHTML =
+      '<span style="color:#d9534f; font-weight:700;">⚠️ Not safe! Never share your OTP. Try again 😊</span>';
+    return;
+  }
+
+  if (state.lessons.safety) {
+    result.innerHTML =
+      '<span class="status">Lesson already completed ✅</span>';
+    return;
+  }
+
+  result.innerHTML =
+    '<span class="status">🎉 Great job! You kept your card safe. +15 ⭐</span>';
+
+  completeLesson("safety", 15);
+
+  setTimeout(() => {
+    closeSafetyLesson();
+  }, 1200);
+}
+      
     function updateLessons() {
       const map = {
         money: "Money",
