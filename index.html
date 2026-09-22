@@ -1158,8 +1158,11 @@
       </div>
 
       <div class="stat-box">
-        <div id="nextTicketProgress" class="stat-value">0 / 500</div>
-        <div class="stat-label">Next Ticket ⭐</div>
+       <div id="nextTicketProgress" class="stat-value">0 / 500 ⭐</div>
+<div class="stat-label">Progress to next ticket</div>
+<div id="nextTicketLeft" class="muted" style="margin-top:4px;">
+  500 ⭐ left
+</div>
       </div>
     </div>
 
@@ -2230,9 +2233,11 @@ function openMonthlyDraw() {
   const progressToNextTicket = monthlyEarned % 500;
 
   document.getElementById("drawTicketCount").textContent = tickets;
-  document.getElementById("nextTicketProgress").textContent =
-    `${progressToNextTicket} / 500`;
+ document.getElementById("nextTicketProgress").textContent =
+  `${progressToNextTicket} / 500 ⭐`;
 
+document.getElementById("nextTicketLeft").textContent =
+  `${500 - progressToNextTicket} ⭐ left`;
   const statusText = document.getElementById("drawStatusText");
 
   if (tickets === 0) {
