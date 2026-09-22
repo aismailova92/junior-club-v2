@@ -651,14 +651,16 @@
 #monthlyDrawModal.hidden,
 #grandPrizeModal.hidden,
 #moneyLessonModal.hidden,
-#safetyLessonModal.hidden {
+#safetyLessonModal.hidden,
+#savingLessonModal.hidden {
   display: none;
 }
 
 #monthlyDrawModal,
 #grandPrizeModal,
 #moneyLessonModal,
-#safetyLessonModal {
+#safetyLessonModal,
+#savingLessonModal {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -671,7 +673,8 @@
 #monthlyDrawModal .modal-overlay,
 #grandPrizeModal .modal-overlay,
 #moneyLessonModal .modal-overlay,
-#safetyLessonModal .modal-overlay {
+#safetyLessonModal .modal-overlay,
+#savingLessonModal .modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -680,7 +683,8 @@
 #monthlyDrawModal .modal-content,
 #grandPrizeModal .modal-content,
 #moneyLessonModal .modal-content,
-#safetyLessonModal .modal-content {
+#safetyLessonModal .modal-content,
+#savingLessonModal .modal-content {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -696,7 +700,8 @@
 #monthlyDrawModal .modal-close,
 #grandPrizeModal .modal-close,
 #moneyLessonModal .modal-close,
-#safetyLessonModal .modal-close {
+#safetyLessonModal .modal-close,
+#savingLessonModal .modal-close {
   position: absolute;
   top: 12px;
   right: 14px;
@@ -1095,12 +1100,28 @@
   <div id="statusLessonSafety"></div>
 </div>
 
-        <div id="lessonSaving" class="card lesson-card">
-          <div class="card-title">🐷 Saving</div>
-          <div class="muted">Small savings every week can help you reach big goals.</div>
-          <button class="btn" onclick="completeLesson('saving', 15)">Complete Lesson +15 ⭐</button>
-          <div id="statusLessonSaving"></div>
-        </div>
+    <div id="lessonSaving" class="card lesson-card">
+  <div class="card-title">🐷 Saving</div>
+
+  <div class="muted">
+    Learn how small savings can turn into something you really want.
+  </div>
+
+  <div class="small" style="margin-top:10px;">
+    🎯 1 saving story · 💰 Make a choice · ⭐ +15
+  </div>
+
+  <button
+    id="btnLessonSaving"
+    class="btn"
+    onclick="openSavingLesson()"
+    style="margin-top:14px;"
+  >
+    Start Lesson →
+  </button>
+
+  <div id="statusLessonSaving"></div>
+</div>
 
         <div id="lessonCashback" class="card lesson-card">
           <div class="card-title">🎁 Cashback & Bonuses</div>
@@ -1346,7 +1367,183 @@
   </div>
 </div>
 
-      
+ <!-- SAVING LESSON MODAL -->
+<div id="savingLessonModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeSavingLesson()"></div>
+
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeSavingLesson()">×</button>
+
+    <div style="text-align:center; margin-bottom:18px;">
+      <div style="font-size:52px;">🐷</div>
+      <div class="card-title">Saving for a Goal</div>
+      <div id="savingLessonProgress" class="muted">Step 1 of 3</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="savingStep1" class="saving-lesson-step">
+
+      <div style="font-size:48px; text-align:center; margin:15px;">
+        👧 🎧
+      </div>
+
+      <div class="card-title">Meet Mia!</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Mia wants to buy new headphones that cost <b>60 AZN</b>.
+        She already saved <b>20 AZN</b>.
+      </div>
+
+      <div style="
+        margin-top:18px;
+        padding:16px;
+        background:#f7f8fc;
+        border-radius:16px;
+        text-align:center;
+      ">
+        <div style="font-size:13px;" class="muted">Saving Goal</div>
+        <div style="font-size:24px; font-weight:800; margin-top:5px;">
+          🎧 20 / 60 AZN
+        </div>
+
+        <div style="
+          height:10px;
+          background:#e5e7eb;
+          border-radius:20px;
+          overflow:hidden;
+          margin-top:12px;
+        ">
+          <div style="
+            width:33%;
+            height:100%;
+            background:#4f7cff;
+            border-radius:20px;
+          "></div>
+        </div>
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showSavingLessonStep(2)"
+      >
+        Next →
+      </button>
+
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="savingStep2" class="saving-lesson-step hidden">
+
+      <div style="font-size:48px; text-align:center; margin:15px;">
+        🪙 ➕ 🐷
+      </div>
+
+      <div class="card-title">Small savings add up</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Mia gets <b>10 AZN</b> every week.
+        If she saves the 10 AZN instead of spending it,
+        she gets closer to her headphones.
+      </div>
+
+      <div style="
+        margin-top:18px;
+        padding:16px;
+        background:#f7f8fc;
+        border-radius:16px;
+        text-align:center;
+        line-height:1.8;
+      ">
+        Today: <b>20 AZN</b><br>
+        + 10 AZN → <b>30 AZN</b><br>
+        + 10 AZN → <b>40 AZN</b><br>
+        + 10 AZN → <b>50 AZN</b><br>
+        + 10 AZN → <b>60 AZN 🎉</b>
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showSavingLessonStep(3)"
+      >
+        Make a Choice →
+      </button>
+
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="savingStep3" class="saving-lesson-step hidden">
+
+      <div style="font-size:48px; text-align:center; margin:15px;">
+        🤔💰
+      </div>
+
+      <div class="card-title">What would you do?</div>
+
+      <div style="font-weight:700; margin:12px 0 16px;">
+        Mia gets another 10 AZN this week.
+        The headphones are still her goal.
+        What choice helps her get closer?
+      </div>
+
+      <button
+        class="btn secondary full"
+        onclick="answerSavingLesson(false)"
+      >
+        🍭 Spend all 10 AZN now
+      </button>
+
+      <button
+        class="btn secondary full"
+        onclick="answerSavingLesson(true)"
+      >
+        🐷 Save 10 AZN for the headphones
+      </button>
+
+      <div id="savingLessonResult" style="margin-top:16px;"></div>
+
+      <div
+        id="savingSuccessProgress"
+        class="hidden"
+        style="
+          margin-top:16px;
+          padding:16px;
+          background:#f7f8fc;
+          border-radius:16px;
+          text-align:center;
+        "
+      >
+        <div class="muted">Mia's new progress</div>
+
+        <div style="font-size:24px; font-weight:800; margin-top:5px;">
+          🎧 30 / 60 AZN
+        </div>
+
+        <div style="
+          height:10px;
+          background:#e5e7eb;
+          border-radius:20px;
+          overflow:hidden;
+          margin-top:12px;
+        ">
+          <div style="
+            width:50%;
+            height:100%;
+            background:#4f7cff;
+            border-radius:20px;
+          "></div>
+        </div>
+
+        <div style="font-weight:700; margin-top:10px;">
+          One step closer! 🎉
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>     
     <!-- GOALS -->
     <section id="goals" class="screen">
       <div class="page-header">
@@ -3407,6 +3604,64 @@ function answerSafetyLesson(correct) {
   setTimeout(() => {
     closeSafetyLesson();
   }, 1200);
+}
+
+function openSavingLesson() {
+  if (state.lessons.saving) {
+    showToast("Lesson already completed ✅");
+    return;
+  }
+
+  document.getElementById("savingLessonResult").innerHTML = "";
+  document.getElementById("savingSuccessProgress").classList.add("hidden");
+
+  showSavingLessonStep(1);
+  document.getElementById("savingLessonModal").classList.remove("hidden");
+}
+
+function closeSavingLesson() {
+  document.getElementById("savingLessonModal").classList.add("hidden");
+}
+
+function showSavingLessonStep(step) {
+  document.querySelectorAll(".saving-lesson-step").forEach(item => {
+    item.classList.add("hidden");
+  });
+
+  document.getElementById(`savingStep${step}`).classList.remove("hidden");
+
+  document.getElementById("savingLessonProgress").textContent =
+    `Step ${step} of 3`;
+}
+
+function answerSavingLesson(correct) {
+  const result = document.getElementById("savingLessonResult");
+  const successProgress = document.getElementById("savingSuccessProgress");
+
+  if (!correct) {
+    result.innerHTML =
+      '<span style="color:#d9534f; font-weight:700;">Not quite 😊 Spending the money moves Mia away from her saving goal. Try again!</span>';
+
+    successProgress.classList.add("hidden");
+    return;
+  }
+
+  if (state.lessons.saving) {
+    result.innerHTML =
+      '<span class="status">Lesson already completed ✅</span>';
+    return;
+  }
+
+  result.innerHTML =
+    '<span class="status">🎉 Great choice! Saving helps Mia get closer to her goal. +15 ⭐</span>';
+
+  successProgress.classList.remove("hidden");
+
+  completeLesson("saving", 15);
+
+  setTimeout(() => {
+    closeSavingLesson();
+  }, 2200);
 }
       
     function updateLessons() {
