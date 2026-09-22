@@ -1084,6 +1084,71 @@
   </button>
 </div>
 
+          <!-- MONTHLY DRAW MODAL -->
+<div id="monthlyDrawModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeMonthlyDraw()"></div>
+
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeMonthlyDraw()">×</button>
+
+    <div style="text-align:center; font-size:64px; margin-bottom:10px;">
+      🎁
+    </div>
+
+    <div class="card-title" style="text-align:center;">
+      Monthly Draw
+    </div>
+
+    <div class="muted" style="text-align:center; margin-bottom:20px;">
+      Your tickets give you a chance to win this month's prize!
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div id="drawTicketCount" class="stat-value">0</div>
+        <div class="stat-label">Your Tickets 🎟</div>
+      </div>
+
+      <div class="stat-box">
+        <div id="nextTicketProgress" class="stat-value">0 / 500</div>
+        <div class="stat-label">Next Ticket ⭐</div>
+      </div>
+    </div>
+
+    <div style="
+      margin-top:18px;
+      padding:18px;
+      background:#f7f8fc;
+      border-radius:16px;
+      text-align:center;
+    ">
+      <div style="font-size:36px; margin-bottom:8px;">🎧</div>
+
+      <div style="font-weight:800;">
+        Prize of the Month
+      </div>
+
+      <div class="muted" style="margin-top:5px;">
+        Special prize for one lucky Junior Club member
+      </div>
+    </div>
+
+    <div id="drawStatusText"
+         class="muted"
+         style="text-align:center; margin-top:18px;">
+      Keep earning ⭐ to get more tickets!
+    </div>
+
+    <button
+      class="btn orange full"
+      style="margin-top:18px;"
+      onclick="closeMonthlyDraw()"
+    >
+      Keep Earning ⭐
+    </button>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-title">🎖 Badge Collection</div>
 
@@ -2106,6 +2171,40 @@ leaderboard.forEach(user => {
   }
 }
 
+function openMonthlyDraw() {
+  const modal = document.getElementById("monthlyDrawModal");
+  if (!modal) return;
+
+  const monthlyEarned = state.monthlyEarned || 0;
+  const tickets = Math.floor(monthlyEarned / 500);
+
+  // Сколько ⭐ уже накоплено к следующему билету
+  const progressToNextTicket = monthlyEarned % 500;
+
+  document.getElementById("drawTicketCount").textContent = tickets;
+  document.getElementById("nextTicketProgress").textContent =
+    `${progressToNextTicket} / 500`;
+
+  const statusText = document.getElementById("drawStatusText");
+
+  if (tickets === 0) {
+    statusText.textContent =
+      `Earn ${500 - progressToNextTicket} more ⭐ to get your first ticket!`;
+  } else {
+    statusText.textContent =
+      `You have ${tickets} ticket${tickets === 1 ? "" : "s"} in this month's draw! 🎟`;
+  }
+
+  modal.classList.remove("hidden");
+}
+
+function closeMonthlyDraw() {
+  const modal = document.getElementById("monthlyDrawModal");
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+}
+      
 async function openSurpriseBox() {
   const completedCount = Object.values(tasks).filter(Boolean).length;
 
