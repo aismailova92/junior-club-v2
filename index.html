@@ -1452,10 +1452,13 @@ async function saveState() {
   try {
     const { error } = await supabaseClient
       .from("user_progress")
-      .update({
-        points: state.points,
-        
-        streak_days: state.streakDays,
+     .update({
+  points: state.points,
+
+  monthly_earned: state.monthlyEarned || 0,
+  monthly_earned_period: state.monthlyEarnedPeriod || today.slice(0, 7),
+
+  streak_days: state.streakDays,
         last_login_date: today,
         
         quiz_days: state.quizDays,
