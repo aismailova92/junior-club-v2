@@ -646,15 +646,17 @@
       margin-right: 4px;
     }
 
-/* Prize Modals */
+/* Modals */
 
 #monthlyDrawModal.hidden,
-#grandPrizeModal.hidden {
+#grandPrizeModal.hidden,
+#moneyLessonModal.hidden {
   display: none;
 }
 
 #monthlyDrawModal,
-#grandPrizeModal {
+#grandPrizeModal,
+#moneyLessonModal {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -665,14 +667,16 @@
 }
 
 #monthlyDrawModal .modal-overlay,
-#grandPrizeModal .modal-overlay {
+#grandPrizeModal .modal-overlay,
+#moneyLessonModal .modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
 }
 
 #monthlyDrawModal .modal-content,
-#grandPrizeModal .modal-content {
+#grandPrizeModal .modal-content,
+#moneyLessonModal .modal-content {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -686,7 +690,8 @@
 }
 
 #monthlyDrawModal .modal-close,
-#grandPrizeModal .modal-close {
+#grandPrizeModal .modal-close,
+#moneyLessonModal .modal-close {
   position: absolute;
   top: 12px;
   right: 14px;
@@ -1085,6 +1090,99 @@
       </div>
     </section>
 
+<!-- FINANCIAL BASICS LESSON MODAL -->
+<div id="moneyLessonModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeMoneyLesson()"></div>
+
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeMoneyLesson()">×</button>
+
+    <div style="text-align:center; margin-bottom:18px;">
+      <div style="font-size:52px;">💰</div>
+      <div class="card-title">Financial Basics</div>
+      <div id="moneyLessonProgress" class="muted">Step 1 of 4</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="moneyStep1" class="money-lesson-step">
+      <div style="font-size:40px; text-align:center; margin:15px;">💵</div>
+
+      <div class="card-title">What is money?</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Money helps us pay for things we need and want.
+        People usually earn money by working or providing something useful.
+      </div>
+
+      <button class="btn full" style="margin-top:20px;"
+              onclick="showMoneyLessonStep(2)">
+        Next →
+      </button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="moneyStep2" class="money-lesson-step hidden">
+      <div style="font-size:40px; text-align:center; margin:15px;">🪙</div>
+
+      <div class="card-title">Earn, Spend & Save</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Money can be earned, spent or saved.
+        Saving some money instead of spending everything can help you reach
+        bigger goals later.
+      </div>
+
+      <button class="btn full" style="margin-top:20px;"
+              onclick="showMoneyLessonStep(3)">
+        Next →
+      </button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="moneyStep3" class="money-lesson-step hidden">
+      <div style="font-size:40px; text-align:center; margin:15px;">🤔</div>
+
+      <div class="card-title">Need or Want?</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        A need is something important, like food or school supplies.
+        A want is something you would like to have, such as a new toy.
+        Knowing the difference helps you make smarter money choices.
+      </div>
+
+      <button class="btn full" style="margin-top:20px;"
+              onclick="showMoneyLessonStep(4)">
+        Take the Quiz →
+      </button>
+    </div>
+
+    <!-- STEP 4: QUESTION -->
+    <div id="moneyStep4" class="money-lesson-step hidden">
+      <div style="font-size:40px; text-align:center; margin:15px;">🧠</div>
+
+      <div class="card-title">Quick Check</div>
+
+      <div style="font-weight:700; margin:12px 0 16px;">
+        You have 20 AZN and you are saving for a bicycle.
+        What could be a smart choice?
+      </div>
+
+      <button class="btn secondary full"
+              onclick="answerMoneyLesson(false)">
+        Spend all 20 AZN on a toy
+      </button>
+
+      <button class="btn secondary full"
+              onclick="answerMoneyLesson(true)">
+        Save some or all of the money for the bicycle
+      </button>
+
+      <div id="moneyLessonResult" style="margin-top:14px;"></div>
+    </div>
+
+  </div>
+</div>
+      
     <!-- GOALS -->
     <section id="goals" class="screen">
       <div class="page-header">
@@ -3044,6 +3142,57 @@ state.monthlyEarnedPeriod = today.slice(0, 7);
 showToast(`Lesson completed! +${reward} ⭐`);
       updateUI();
     }
+
+      function openMoneyLesson() {
+  if (state.lessons.money) {
+    showToast("Lesson already completed ✅");
+    return;
+  }
+
+  document.getElementById("moneyLessonResult").innerHTML = "";
+  showMoneyLessonStep(1);
+  document.getElementById("moneyLessonModal").classList.remove("hidden");
+}
+
+function closeMoneyLesson() {
+  document.getElementById("moneyLessonModal").classList.add("hidden");
+}
+
+function showMoneyLessonStep(step) {
+  document.querySelectorAll(".money-lesson-step").forEach(item => {
+    item.classList.add("hidden");
+  });
+
+  document.getElementById(`moneyStep${step}`).classList.remove("hidden");
+
+  document.getElementById("moneyLessonProgress").textContent =
+    `Step ${step} of 4`;
+}
+
+function answerMoneyLesson(correct) {
+  const result = document.getElementById("moneyLessonResult");
+
+  if (!correct) {
+    result.innerHTML =
+      '<span style="color:#d9534f; font-weight:700;">Not quite. Think about your bigger goal and try again 😊</span>';
+    return;
+  }
+
+  if (state.lessons.money) {
+    result.innerHTML =
+      '<span class="status">Lesson already completed ✅</span>';
+    return;
+  }
+
+  result.innerHTML =
+    '<span class="status">🎉 Correct! Lesson completed. +15 ⭐</span>';
+
+  completeLesson("money", 15);
+
+  setTimeout(() => {
+    closeMoneyLesson();
+  }, 1200);
+}
 
     function updateLessons() {
       const map = {
