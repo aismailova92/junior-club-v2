@@ -652,7 +652,8 @@
 #grandPrizeModal.hidden,
 #moneyLessonModal.hidden,
 #safetyLessonModal.hidden,
-#savingLessonModal.hidden {
+#savingLessonModal.hidden,
+#cashbackLessonModal.hidden {
   display: none;
 }
 
@@ -660,7 +661,8 @@
 #grandPrizeModal,
 #moneyLessonModal,
 #safetyLessonModal,
-#savingLessonModal {
+#savingLessonModal,
+#cashbackLessonModal {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -674,7 +676,8 @@
 #grandPrizeModal .modal-overlay,
 #moneyLessonModal .modal-overlay,
 #safetyLessonModal .modal-overlay,
-#savingLessonModal .modal-overlay {
+#savingLessonModal .modal-overlay,
+#cashbackLessonModal .modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -684,7 +687,8 @@
 #grandPrizeModal .modal-content,
 #moneyLessonModal .modal-content,
 #safetyLessonModal .modal-content,
-#savingLessonModal .modal-content {
+#savingLessonModal .modal-content,
+#cashbackLessonModal .modal-content {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -701,7 +705,8 @@
 #grandPrizeModal .modal-close,
 #moneyLessonModal .modal-close,
 #safetyLessonModal .modal-close,
-#savingLessonModal .modal-close {
+#savingLessonModal .modal-close,
+#cashbackLessonModal .modal-close {
   position: absolute;
   top: 12px;
   right: 14px;
@@ -1123,12 +1128,28 @@
   <div id="statusLessonSaving"></div>
 </div>
 
-        <div id="lessonCashback" class="card lesson-card">
-          <div class="card-title">🎁 Cashback & Bonuses</div>
-          <div class="muted">Cashback means getting part of your spending back as money or points.</div>
-          <button class="btn" onclick="completeLesson('cashback', 15)">Complete Lesson +15 ⭐</button>
-          <div id="statusLessonCashback"></div>
-        </div>
+      <div id="lessonCashback" class="card lesson-card">
+  <div class="card-title">🎁 Cashback & Bonuses</div>
+
+  <div class="muted">
+    Learn how cashback works and why a bigger bonus does not always mean a better deal.
+  </div>
+
+  <div class="small" style="margin-top:10px;">
+    🎁 Learn cashback · 🛍️ Compare a deal · ⭐ +15
+  </div>
+
+  <button
+    id="btnLessonCashback"
+    class="btn"
+    onclick="openCashbackLesson()"
+    style="margin-top:14px;"
+  >
+    Start Lesson →
+  </button>
+
+  <div id="statusLessonCashback"></div>
+</div>
       </div>
     </section>
 
@@ -1544,6 +1565,163 @@
 
   </div>
 </div>     
+
+<!-- CASHBACK LESSON MODAL -->
+<div id="cashbackLessonModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeCashbackLesson()"></div>
+
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeCashbackLesson()">×</button>
+
+    <div style="text-align:center; margin-bottom:18px;">
+      <div style="font-size:52px;">🎁</div>
+      <div class="card-title">Cashback & Bonuses</div>
+      <div id="cashbackLessonProgress" class="muted">Step 1 of 3</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="cashbackStep1" class="cashback-lesson-step">
+
+      <div style="font-size:48px; text-align:center; margin:15px;">
+        💳 → 🎁
+      </div>
+
+      <div class="card-title">What is cashback?</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        Cashback means getting a small part of the money you spent back.
+      </div>
+
+      <div style="
+        margin-top:18px;
+        padding:16px;
+        background:#f7f8fc;
+        border-radius:16px;
+        text-align:center;
+      ">
+        <div class="muted">Example</div>
+
+        <div style="font-size:22px; font-weight:800; margin-top:8px;">
+          🛍️ 20 AZN
+        </div>
+
+        <div style="margin-top:8px;">
+          5% cashback
+        </div>
+
+        <div style="font-size:24px; font-weight:800; margin-top:8px;">
+          🎁 1 AZN back
+        </div>
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showCashbackLessonStep(2)"
+      >
+        Next →
+      </button>
+
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="cashbackStep2" class="cashback-lesson-step hidden">
+
+      <div style="font-size:48px; text-align:center; margin:15px;">
+        💡
+      </div>
+
+      <div class="card-title">Cashback isn't free money</div>
+
+      <div class="muted" style="margin-top:8px; line-height:1.6;">
+        To receive cashback, you first have to spend money.
+        A big cashback percentage does not always mean that you are getting
+        the best deal.
+      </div>
+
+      <div style="
+        margin-top:18px;
+        padding:16px;
+        background:#fff7e8;
+        border-radius:16px;
+        text-align:center;
+        font-weight:700;
+      ">
+        Smart shoppers compare the final price — not just the bonus. 🧠
+      </div>
+
+      <button
+        class="btn full"
+        style="margin-top:20px;"
+        onclick="showCashbackLessonStep(3)"
+      >
+        Smart Shopper Challenge →
+      </button>
+
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="cashbackStep3" class="cashback-lesson-step hidden">
+
+      <div style="font-size:48px; text-align:center; margin:15px;">
+        🛍️🤔
+      </div>
+
+      <div class="card-title">Which deal is better?</div>
+
+      <div class="muted" style="margin-top:8px;">
+        You want to buy the same toy. Two shops offer different deals:
+      </div>
+
+      <div style="
+        margin-top:16px;
+        padding:15px;
+        background:#f7f8fc;
+        border-radius:16px;
+      ">
+        <b>🏪 Shop A</b><br>
+        Toy: 20 AZN<br>
+        Cashback: 0%<br>
+        <b>Final cost: 20 AZN</b>
+      </div>
+
+      <div style="
+        margin-top:10px;
+        padding:15px;
+        background:#f7f8fc;
+        border-radius:16px;
+      ">
+        <b>🏪 Shop B</b><br>
+        Toy: 30 AZN<br>
+        Cashback: 10% = 3 AZN<br>
+        <b>Final cost: 27 AZN</b>
+      </div>
+
+      <div style="font-weight:700; margin:18px 0 14px;">
+        Which shop is the smarter choice?
+      </div>
+
+      <button
+        class="btn secondary full"
+        onclick="answerCashbackLesson(true)"
+      >
+        🏪 Shop A — 20 AZN
+      </button>
+
+      <button
+        class="btn secondary full"
+        onclick="answerCashbackLesson(false)"
+      >
+        🏪 Shop B — because it gives 10% cashback
+      </button>
+
+      <div id="cashbackLessonResult" style="margin-top:16px;"></div>
+
+    </div>
+
+  </div>
+</div>
+      
     <!-- GOALS -->
     <section id="goals" class="screen">
       <div class="page-header">
@@ -3662,6 +3840,58 @@ function answerSavingLesson(correct) {
   setTimeout(() => {
     closeSavingLesson();
   }, 2200);
+}
+
+      function openCashbackLesson() {
+  if (state.lessons.cashback) {
+    showToast("Lesson already completed ✅");
+    return;
+  }
+
+  document.getElementById("cashbackLessonResult").innerHTML = "";
+
+  showCashbackLessonStep(1);
+  document.getElementById("cashbackLessonModal").classList.remove("hidden");
+}
+
+function closeCashbackLesson() {
+  document.getElementById("cashbackLessonModal").classList.add("hidden");
+}
+
+function showCashbackLessonStep(step) {
+  document.querySelectorAll(".cashback-lesson-step").forEach(item => {
+    item.classList.add("hidden");
+  });
+
+  document.getElementById(`cashbackStep${step}`).classList.remove("hidden");
+
+  document.getElementById("cashbackLessonProgress").textContent =
+    `Step ${step} of 3`;
+}
+
+function answerCashbackLesson(correct) {
+  const result = document.getElementById("cashbackLessonResult");
+
+  if (!correct) {
+    result.innerHTML =
+      '<span style="color:#d9534f; font-weight:700;">Not quite 😊 Look at the final price after cashback and compare both shops.</span>';
+    return;
+  }
+
+  if (state.lessons.cashback) {
+    result.innerHTML =
+      '<span class="status">Lesson already completed ✅</span>';
+    return;
+  }
+
+  result.innerHTML =
+    '<span class="status">🎉 Smart choice! 20 AZN is cheaper than 27 AZN. +15 ⭐</span>';
+
+  completeLesson("cashback", 15);
+
+  setTimeout(() => {
+    closeCashbackLesson();
+  }, 1800);
 }
       
     function updateLessons() {
