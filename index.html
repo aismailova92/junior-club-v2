@@ -2767,9 +2767,13 @@ if (bonus) {
         return;
       }
 
-      state.lessons[id] = true;
-      state.points += reward;
-      showToast(`Lesson completed! +${reward} ⭐`);
+state.lessons[id] = true;
+
+state.points += reward;
+state.monthlyEarned = (state.monthlyEarned || 0) + reward;
+state.monthlyEarnedPeriod = today.slice(0, 7);
+
+showToast(`Lesson completed! +${reward} ⭐`);
       updateUI();
     }
 
