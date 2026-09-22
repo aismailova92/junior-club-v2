@@ -1040,13 +1040,28 @@
       </div>
 
       <div class="content">
-        <div id="lessonMoney" class="card lesson-card">
-          <div class="card-title">💰 Financial Basics</div>
-          <div class="muted">Learn what money is and why people save it.</div>
-          <button class="btn" onclick="completeLesson('money', 15)">Complete Lesson +15 ⭐</button>
-          <div id="statusLessonMoney"></div>
-        </div>
+       <div id="lessonMoney" class="card lesson-card">
+  <div class="card-title">💰 Financial Basics</div>
 
+  <div class="muted">
+    Discover what money is, where it comes from and how to make smart choices.
+  </div>
+
+  <div class="small" style="margin-top:10px;">
+    📖 3 short steps · 🧠 1 question · ⭐ +15
+  </div>
+
+  <button
+    id="btnLessonMoney"
+    class="btn"
+    onclick="openMoneyLesson()"
+    style="margin-top:14px;"
+  >
+    Start Lesson →
+  </button>
+
+  <div id="statusLessonMoney"></div>
+</div>
         <div id="lessonSafety" class="card lesson-card">
           <div class="card-title">🔐 Card Safety</div>
           <div class="muted">PIN, OTP and card details must always stay private.</div>
