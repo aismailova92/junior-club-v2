@@ -1050,22 +1050,39 @@
           <div id="dailyBonusText" class="muted">Daily bonus: +1 ⭐</div>
         </div>
 
-        <div class="card ticket-card">
-          <div class="card-title">🎟 Lottery / Prize Center</div>
-          <div class="muted">Every 500 points gives 1 lottery ticket.</div>
-          <div class="stat-row">
-            <div class="stat-box">
-              <div id="ticketCount" class="stat-value">0</div>
-              <div class="stat-label">Tickets</div>
-            </div>
-            <div class="stat-box">
-              <div id="monthlyEarned" class="stat-value">0</div>
-              <div class="stat-label">Earned ⭐</div>
-            </div>
-          </div>
-          <button class="btn orange full" onclick="showToast('🎁 Monthly draw will be available soon')">Monthly Draw</button>
-          <button class="btn secondary full" onclick="showToast('🏰 Grand Prize: Disneyland draw concept')">Grand Prize</button>
-        </div>
+      <div class="card ticket-card">
+  <div class="card-title">🎟 Lottery / Prize Center</div>
+
+  <div class="muted">
+    Every 500 ⭐ earned this month gives you 1 lottery ticket.
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <div id="ticketCount" class="stat-value">0</div>
+      <div class="stat-label">Tickets</div>
+    </div>
+
+    <div class="stat-box">
+      <div id="monthlyEarned" class="stat-value">0</div>
+      <div class="stat-label">Earned this month ⭐</div>
+    </div>
+  </div>
+
+  <button
+    class="btn orange full"
+    onclick="openMonthlyDraw()"
+  >
+    🎁 Monthly Draw
+  </button>
+
+  <button
+    class="btn secondary full"
+    onclick="showToast('🏰 Keep collecting tickets — Grand Prize coming soon!')"
+  >
+    🏰 Grand Prize
+  </button>
+</div>
 
 <div class="card">
   <div class="card-title">🎖 Badge Collection</div>
