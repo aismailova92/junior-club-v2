@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -2123,16 +2123,20 @@ async function openSurpriseBox() {
     }
   }
 
-  const newPoints = state.points + reward;
+const newPoints = state.points + reward;
+const newMonthlyEarned = (state.monthlyEarned || 0) + reward;
+const currentMonth = today.slice(0, 7);
 
   if (supabaseClient && activeUser) {
     const { error } = await supabaseClient
       .from("user_progress")
-      .update({
-        points: newPoints,
-        surprise_box_date: today,
-        updated_at: new Date().toISOString()
-      })
+    .update({
+  points: newPoints,
+  monthly_earned: newMonthlyEarned,
+  monthly_earned_period: currentMonth,
+  surprise_box_date: today,
+  updated_at: new Date().toISOString()
+})
       .eq("user_id", activeUser.dbId || activeUser.id);
 
     if (error) {
@@ -2142,9 +2146,11 @@ async function openSurpriseBox() {
     }
   }
 
-  state.points = newPoints;
-  state.surpriseBoxOpened = true;
-
+state.points = newPoints;
+state.monthlyEarned = newMonthlyEarned;
+state.monthlyEarnedPeriod = currentMonth;
+state.surpriseBoxOpened = true;
+  
   document.getElementById("surpriseBoxResult").textContent =
     `🎉 +${reward} ⭐`;
 
@@ -2626,7 +2632,11 @@ if (bonus) {
       }
 
       const todayTask = getTodayTask();
+
       state.points += todayTask.reward;
+      state.monthlyEarned = (state.monthlyEarned || 0) + todayTask.reward;
+      state.monthlyEarnedPeriod = today.slice(0, 7);
+
       tasks.daily = true;
       state.dailyTaskCompleted = true;
       state.taskDays++;
@@ -2661,8 +2671,12 @@ if (bonus) {
         return;
       }
 
-      const reward = rating * 5;
+       const reward = rating * 5;
+
       state.points += reward;
+      state.monthlyEarned = (state.monthlyEarned || 0) + reward;
+      state.monthlyEarnedPeriod = today.slice(0, 7);
+
       tasks.parent = true;
       state.parentCompleted = true;
       state.parentDays++;
@@ -2726,7 +2740,11 @@ if (bonus) {
           tasks.game = true;
           state.gameCompleted = true;
           state.gameDays++;
+
           state.points += 20;
+          state.monthlyEarned = (state.monthlyEarned || 0) + 20;
+          state.monthlyEarnedPeriod = today.slice(0, 7);
+
           localStorage.setItem("v2_gameDate", today);
           document.getElementById("gameResult").innerHTML = '<span class="status">🎉 Game completed! +20 ⭐</span>';
           showToast("Game completed! +20 ⭐");
