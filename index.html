@@ -646,13 +646,15 @@
       margin-right: 4px;
     }
 
-      /* Monthly Draw Modal */
+/* Prize Modals */
 
-#monthlyDrawModal.hidden {
+#monthlyDrawModal.hidden,
+#grandPrizeModal.hidden {
   display: none;
 }
 
-#monthlyDrawModal {
+#monthlyDrawModal,
+#grandPrizeModal {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -662,13 +664,15 @@
   padding: 20px;
 }
 
-#monthlyDrawModal .modal-overlay {
+#monthlyDrawModal .modal-overlay,
+#grandPrizeModal .modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
 }
 
-#monthlyDrawModal .modal-content {
+#monthlyDrawModal .modal-content,
+#grandPrizeModal .modal-content {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -681,7 +685,8 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
-#monthlyDrawModal .modal-close {
+#monthlyDrawModal .modal-close,
+#grandPrizeModal .modal-close {
   position: absolute;
   top: 12px;
   right: 14px;
@@ -1124,13 +1129,12 @@
     🎁 Monthly Draw
   </button>
 
-  <button
-    class="btn secondary full"
-    onclick="showToast('🏰 Keep collecting tickets — Grand Prize coming soon!')"
-  >
-    🏰 Grand Prize
-  </button>
-</div>
+<button
+  class="btn secondary full"
+  onclick="openGrandPrize()"
+>
+  🏰 Grand Prize
+</button>
 
           <!-- MONTHLY DRAW MODAL -->
 <div id="monthlyDrawModal" class="modal hidden">
@@ -1200,6 +1204,72 @@
   </div>
 </div>
 
+<!-- GRAND PRIZE MODAL -->
+<div id="grandPrizeModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeGrandPrize()"></div>
+
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeGrandPrize()">×</button>
+
+    <div style="text-align:center; font-size:72px; margin-bottom:10px;">
+      🏰
+    </div>
+
+    <div class="card-title" style="text-align:center;">
+      Grand Prize
+    </div>
+
+    <div style="
+      text-align:center;
+      font-size:22px;
+      font-weight:800;
+      margin-top:10px;
+    ">
+      A magical trip to Disneyland ✨
+    </div>
+
+    <div class="muted" style="text-align:center; margin-top:8px;">
+      The biggest Junior Club reward of the year
+    </div>
+
+    <div style="
+      margin-top:20px;
+      padding:18px;
+      background:#f7f8fc;
+      border-radius:16px;
+    ">
+      <div style="font-weight:800; margin-bottom:10px;">
+        🎟 How it works
+      </div>
+
+      <div class="muted">
+        Keep completing activities and earning lottery tickets throughout the year.
+        Your tickets can give you chances to participate in the Grand Prize draw.
+      </div>
+    </div>
+
+    <div style="
+      text-align:center;
+      font-weight:800;
+      margin-top:20px;
+    ">
+      🚀 Coming soon
+    </div>
+
+    <div class="muted" style="text-align:center; margin-top:5px;">
+      Grand Prize rules and draw date will be announced later.
+    </div>
+
+    <button
+      class="btn orange full"
+      style="margin-top:20px;"
+      onclick="closeGrandPrize()"
+    >
+      Keep Earning ⭐
+    </button>
+  </div>
+</div>
+          
 <div class="card">
   <div class="card-title">🎖 Badge Collection</div>
 
@@ -2253,6 +2323,20 @@ document.getElementById("nextTicketLeft").textContent =
 
 function closeMonthlyDraw() {
   const modal = document.getElementById("monthlyDrawModal");
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+}
+
+      function openGrandPrize() {
+  const modal = document.getElementById("grandPrizeModal");
+  if (!modal) return;
+
+  modal.classList.remove("hidden");
+}
+
+function closeGrandPrize() {
+  const modal = document.getElementById("grandPrizeModal");
   if (!modal) return;
 
   modal.classList.add("hidden");
