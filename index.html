@@ -1067,12 +1067,28 @@
 
   <div id="statusLessonMoney"></div>
 </div>
-        <div id="lessonSafety" class="card lesson-card">
-          <div class="card-title">🔐 Card Safety</div>
-          <div class="muted">PIN, OTP and card details must always stay private.</div>
-          <button class="btn" onclick="completeLesson('safety', 15)">Complete Lesson +15 ⭐</button>
-          <div id="statusLessonSafety"></div>
-        </div>
+       <div id="lessonSafety" class="card lesson-card">
+  <div class="card-title">🔐 Card Safety</div>
+
+  <div class="muted">
+    Learn how to protect your card, PIN and secret codes from scammers.
+  </div>
+
+  <div class="small" style="margin-top:10px;">
+    📖 3 short steps · 🧠 1 safety challenge · ⭐ +15
+  </div>
+
+  <button
+    id="btnLessonSafety"
+    class="btn"
+    onclick="openSafetyLesson()"
+    style="margin-top:14px;"
+  >
+    Start Lesson →
+  </button>
+
+  <div id="statusLessonSafety"></div>
+</div>
 
         <div id="lessonSaving" class="card lesson-card">
           <div class="card-title">🐷 Saving</div>
