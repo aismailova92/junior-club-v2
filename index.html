@@ -645,6 +645,54 @@
       font-size: 18px;
       margin-right: 4px;
     }
+
+      /* Monthly Draw Modal */
+
+#monthlyDrawModal.hidden {
+  display: none;
+}
+
+#monthlyDrawModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#monthlyDrawModal .modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+#monthlyDrawModal .modal-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+#monthlyDrawModal .modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f3f7;
+  font-size: 22px;
+  cursor: pointer;
+}
     
   </style>
 </head>
