@@ -2561,9 +2561,11 @@ function closeInviteModal() {
         if (index === selectedIndex && selectedIndex !== q.correctIndex) btn.classList.add("wrong");
       });
 
-      if (selectedIndex === q.correctIndex) {
-        quizScore++;
-        state.points += 10;
+if (selectedIndex === q.correctIndex) {
+  quizScore++;
+  state.points += 10;
+  state.monthlyEarned = (state.monthlyEarned || 0) + 10;
+  state.monthlyEarnedPeriod = today.slice(0, 7);
         document.getElementById("quizResult").innerHTML = `✅ Correct! +10 ⭐<br><span class="muted">${q.explanation}</span>`;
       } else {
         document.getElementById("quizResult").innerHTML = `❌ Not quite.<br><span class="muted">${q.explanation}</span>`;
@@ -2586,9 +2588,13 @@ function closeInviteModal() {
     function finishQuiz() {
       if (tasks.quiz) return;
 
-      const bonus = quizScore === 3 ? 20 : 0;
-      if (bonus) state.points += bonus;
+     const bonus = quizScore === 3 ? 20 : 0;
 
+if (bonus) {
+  state.points += bonus;
+  state.monthlyEarned = (state.monthlyEarned || 0) + bonus;
+  state.monthlyEarnedPeriod = today.slice(0, 7);
+}
       tasks.quiz = true;
       state.quizCompleted = true;
       state.quizDays++;
