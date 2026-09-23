@@ -2297,7 +2297,7 @@ async function saveState() {
   localStorage.setItem("v2_taskDays", state.taskDays);
   localStorage.setItem("v2_parentDays", state.parentDays);
   localStorage.setItem("v2_gameDays", state.gameDays);
-  localStorage.setItem("v2_lessons", JSON.stringify(state.lessons));
+  localStorage.setItem("", JSON.stringify(state.lessons));
   localStorage.setItem("v2_goals", JSON.stringify(state.goals));
   localStorage.setItem("v2_cardOrdered", state.cardOrdered ? "true" : "false");
 
@@ -4017,7 +4017,7 @@ function answerCashbackLesson(correct) {
       localStorage.removeItem("v2_taskDays");
       localStorage.removeItem("v2_parentDays");
       localStorage.removeItem("v2_gameDays");
-      localStorage.removeItem("v2_lessons");
+      localStorage.removeItem("");
       localStorage.removeItem("v2_goals");
       localStorage.removeItem("v2_cardOrdered");
 
@@ -4045,6 +4045,17 @@ function answerCashbackLesson(correct) {
       goToTab("home");
     }
 
+async function resetLearnForTesting() {
+  state.lessons = {};
+
+  localStorage.removeItem("v2_lessons");
+
+  showToast("Learn lessons reset for testing 📚");
+  updateUI();
+
+  goToTab("learn");
+}
+      
     function logoutUser() {
       localStorage.removeItem("v2_activeUserId");
       activeUser = null;
